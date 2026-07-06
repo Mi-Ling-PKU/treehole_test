@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-ink: 34 39 46;
+  --color-moss: 93 116 97;
+  --color-clay: 182 106 88;
+  --color-paper: 250 248 243;
+  --color-mist: 237 242 239;
+  --color-panel: 255 255 255;
+  --background-start: 237 242 239;
+  --background-end: 250 248 243;
+  --shadow-soft: 0 18px 45px rgba(34, 39, 46, 0.08);
+  background: rgb(var(--color-paper));
+}
+
+.dark {
+  color-scheme: dark;
+  --color-ink: 233 237 232;
+  --color-moss: 142 177 150;
+  --color-clay: 220 139 118;
+  --color-paper: 18 22 25;
+  --color-mist: 37 45 43;
+  --color-panel: 27 32 36;
+  --background-start: 18 24 27;
+  --background-end: 11 13 16;
+  --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.26);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgb(var(--background-start) / 0.95), rgb(var(--background-end) / 0.96) 36%),
+    rgb(var(--color-paper));
+  color: rgb(var(--color-ink));
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+::selection {
+  background: rgba(182, 106, 88, 0.22);
+}
+
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-clay/40 focus:ring-offset-2 focus:ring-offset-paper;
+}
