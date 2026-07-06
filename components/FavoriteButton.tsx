@@ -26,7 +26,7 @@ export function FavoriteButton({
       setFavorited((value) => !value);
       onChanged?.();
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "操作失败。");
+      setStatus(error instanceof Error ? error.message : "暂时无法更新收藏，请稍后再试。");
     } finally {
       setSubmitting(false);
     }

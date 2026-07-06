@@ -175,7 +175,7 @@ export async function createPost(content: string) {
   assertSupabaseConfigured();
   const user = await getCurrentUser();
   if (!user) {
-    throw new Error("请先登录后再发布。");
+    throw new Error("登录后就可以发布。");
   }
 
   const { error } = await supabase.from("posts").insert({
@@ -192,7 +192,7 @@ export async function createComment(postId: string, content: string, replyToComm
   assertSupabaseConfigured();
   const user = await getCurrentUser();
   if (!user) {
-    throw new Error("请先登录后再评论。");
+    throw new Error("登录后就可以回复。");
   }
 
   const { error } = await supabase.from("comments").insert({
@@ -213,7 +213,7 @@ export async function toggleFavorite(postId: string, shouldFavorite: boolean) {
   assertSupabaseConfigured();
   const user = await getCurrentUser();
   if (!user) {
-    throw new Error("请先登录后再收藏。");
+    throw new Error("登录后就可以收藏。");
   }
 
   if (shouldFavorite) {
@@ -245,7 +245,7 @@ export async function createReport(targetType: ReportTargetType, targetId: strin
   assertSupabaseConfigured();
   const user = await getCurrentUser();
   if (!user) {
-    throw new Error("请先登录后再举报。");
+    throw new Error("登录后就可以举报。");
   }
 
   const { error } = await supabase.from("reports").insert({

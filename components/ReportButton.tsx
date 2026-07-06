@@ -26,7 +26,7 @@ export function ReportButton({ targetType, targetId }: { targetType: ReportTarge
       setOpen(false);
       setStatus("已提交举报。");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "举报失败。");
+      setStatus(error instanceof Error ? error.message : "暂时提交不了举报，请稍后再试。");
     } finally {
       setSubmitting(false);
     }

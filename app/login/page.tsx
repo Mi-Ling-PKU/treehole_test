@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ArrowLeft, LogIn, UserPlus } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { getFriendlyAuthMessage } from "@/lib/userMessages";
 
 type Mode = "login" | "signup";
 
@@ -27,7 +28,7 @@ export default function LoginPage() {
         if (error) {
           throw error;
         }
-        setStatus("注册邮件已发送。请打开邮箱完成验证后再登录。");
+        setStatus("注册成功！");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
@@ -36,7 +37,7 @@ export default function LoginPage() {
         router.push("/");
       }
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "操作失败。");
+      setStatus(getFriendlyAuthMessage(error));
     } finally {
       setSubmitting(false);
     }
@@ -52,7 +53,7 @@ export default function LoginPage() {
       <section className="rounded-md border border-ink/10 bg-panel/90 p-6 shadow-soft">
         <div className="mb-6">
           <h1 className="text-xl font-semibold text-ink">{mode === "login" ? "登录" : "注册"}</h1>
-          <p className="mt-2 text-sm leading-6 text-ink/60">账号只用于保存收藏和管理权限，公开页面不会显示邮箱。</p>
+          <p className="mt-2 text-sm leading-6 text-ink/60">账号只用于保存收藏和你的个人状态，公开页面不会显示邮箱。</p>
         </div>
 
         <div className="mb-5 grid grid-cols-2 rounded-md bg-mist p-1">

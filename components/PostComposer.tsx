@@ -26,7 +26,7 @@ export function PostComposer({ onCreated }: { onCreated: () => void }) {
       setStatus("已发布。");
       onCreated();
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "发布失败。");
+      setStatus(error instanceof Error ? error.message : "暂时发布不了，请稍后再试。");
     } finally {
       setSubmitting(false);
     }

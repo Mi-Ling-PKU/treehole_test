@@ -20,7 +20,7 @@ export default function HomePage() {
     try {
       setPosts(await listPosts());
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "加载失败。");
+      setError(loadError instanceof Error ? loadError.message : "暂时加载不了内容，请稍后再试。");
     } finally {
       setLoading(false);
     }
@@ -41,13 +41,13 @@ export default function HomePage() {
       <section className="space-y-4">
         <div>
           <h1 className="text-2xl font-semibold text-ink">匿名树洞</h1>
-          <p className="mt-2 text-sm leading-6 text-ink/60">公开页面只显示编号。登录账号仅用于保存收藏和减少滥用。</p>
+          <p className="mt-2 text-sm leading-6 text-ink/60">公开页面只显示编号。登录后可以收藏、回复和发布树洞。</p>
         </div>
 
         {loading ? <p className="text-sm text-ink/55">正在加载...</p> : null}
         {error ? <p className="rounded-md bg-clay/10 p-3 text-sm text-clay">{error}</p> : null}
         {!loading && !error && posts.length === 0 ? (
-          <EmptyState title="还没有树洞" text="登录后发布第一条内容。" />
+          <EmptyState title="还没有树洞" text="登录后可以发布第一条内容。" />
         ) : null}
         <div className="space-y-4">
           {posts.map((post) => (

@@ -40,7 +40,7 @@ export function AuthGate({ children, requireAuth = false }: AuthGateProps) {
   if (!user && requireAuth) {
     return (
       <div className="rounded-md border border-ink/10 bg-panel/80 p-5 shadow-soft">
-        <p className="text-sm text-ink/70">请先登录，登录后可以发布、评论、收藏和举报。</p>
+        <p className="text-sm text-ink/70">登录后就可以发布、回复、收藏和举报。</p>
         <Link
           href="/login"
           className="mt-4 inline-flex rounded-md bg-moss px-4 py-2 text-sm font-semibold text-white hover:bg-moss/90"
@@ -71,7 +71,7 @@ export function AuthGate({ children, requireAuth = false }: AuthGateProps) {
           </>
         ) : (
           <>
-            <span className="text-ink/70">未登录时可以浏览，登录后可以互动。</span>
+            <span className="text-ink/70">你可以先浏览，登录后再参与互动。</span>
             <Link href="/login" className="rounded-md bg-moss px-3 py-2 font-semibold text-white hover:bg-moss/90">
               登录
             </Link>

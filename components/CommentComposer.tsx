@@ -38,7 +38,7 @@ export function CommentComposer({
       setStatus("已回复。");
       onCreated();
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "回复失败。");
+      setStatus(error instanceof Error ? error.message : "暂时回复不了，请稍后再试。");
     } finally {
       setSubmitting(false);
     }

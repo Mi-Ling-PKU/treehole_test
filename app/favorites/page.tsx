@@ -21,7 +21,7 @@ export default function FavoritesPage() {
     try {
       setPosts(await listFavoritePosts());
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "加载失败。");
+      setError(loadError instanceof Error ? loadError.message : "暂时加载不了收藏，请稍后再试。");
     } finally {
       setLoading(false);
     }

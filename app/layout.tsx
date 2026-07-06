@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MessageCircleHeart } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { HeaderNav } from "@/components/HeaderNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,18 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 </span>
                 树洞
               </Link>
-              <nav className="flex items-center gap-2 text-sm font-medium text-ink/70">
-                <Link className="rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/">
-                  首页
-                </Link>
-                <Link className="rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/favorites">
-                  收藏
-                </Link>
-                <Link className="rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/admin">
-                  管理
-                </Link>
-                <ThemeToggle />
-              </nav>
+              <HeaderNav />
             </div>
           </header>
           {children}

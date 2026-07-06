@@ -30,7 +30,7 @@ export default function AdminPage() {
       setIsAdmin(allowed);
       setReports(allowed ? await listAdminReports() : []);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "加载失败。");
+      setMessage(error instanceof Error ? error.message : "暂时无法加载管理内容。请稍后再试。");
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ export default function AdminPage() {
       await updateContentStatus(targetType, targetId, status);
       await loadAdmin();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "操作失败。");
+      setMessage(error instanceof Error ? error.message : "操作没有成功，请稍后再试。");
     }
   }
 
@@ -56,7 +56,7 @@ export default function AdminPage() {
       await markReportReviewed(reportId);
       await loadAdmin();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "操作失败。");
+      setMessage(error instanceof Error ? error.message : "操作没有成功，请稍后再试。");
     }
   }
 
@@ -70,7 +70,7 @@ export default function AdminPage() {
       <AuthGate requireAuth>
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-semibold text-ink">管理后台</h1>
+            <h1 className="text-2xl font-semibold text-ink">内容管理</h1>
             <p className="mt-2 text-sm text-ink/60">处理举报、隐藏、恢复或删除帖子和回复。</p>
           </div>
           <button
@@ -90,9 +90,9 @@ export default function AdminPage() {
           <div className="rounded-md border border-ink/10 bg-panel/85 p-5 shadow-soft">
             <div className="flex items-center gap-2 font-semibold text-ink">
               <ShieldAlert size={18} aria-hidden="true" />
-              当前账号不是管理员
+              无法访问此页面
             </div>
-            <p className="mt-2 text-sm leading-6 text-ink/60">请先在 Supabase 的 `admins` 表中添加你的用户 ID。</p>
+            <p className="mt-2 text-sm leading-6 text-ink/60">这个页面只对站点管理者开放。你仍然可以返回首页浏览和发布树洞。</p>
           </div>
         ) : null}
 

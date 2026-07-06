@@ -44,7 +44,7 @@ export default function PostDetailPage() {
       setComments(commentsData);
       setIsFavorited(favorited);
     } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "加载失败。");
+      setError(loadError instanceof Error ? loadError.message : "暂时加载不了这个树洞，请稍后再试。");
     } finally {
       setLoading(false);
     }
