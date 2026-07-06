@@ -1,6 +1,6 @@
 # 树洞 MVP
 
-一个使用 Next.js + Supabase + Vercel 的匿名树洞网站。
+一个使用 Next.js + Supabase + Cloudflare Workers 的匿名树洞网站。
 
 ## 本地运行
 
@@ -41,7 +41,7 @@ values ('替换成你的用户ID');
 
 之后这个账号可以访问 `/admin` 处理举报。
 
-## 部署到 GitHub + Vercel
+## 部署到 GitHub + Cloudflare Workers
 
 1. 初始化 Git 并推送到 GitHub：
 
@@ -54,15 +54,43 @@ git remote add origin 你的GitHub仓库地址
 git push -u origin main
 ```
 
-2. 在 Vercel 新建项目，选择这个 GitHub 仓库。
-3. 在 Vercel Project Settings > Environment Variables 添加：
+2. 注册并登录 Cloudflare。
+3. 本地部署前，先登录 Wrangler：
+
+```bash
+npx wrangler login
+```
+
+4. 部署到 Cloudflare Workers：
+
+```bash
+npm run deploy
+```
+
+部署成功后，Cloudflare 会给你一个 `*.workers.dev` 网址。
+
+5. 如果你使用 Cloudflare 的 GitHub 自动构建，在 Workers Builds 的 Variables and secrets 中添加：
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 ```
 
-4. 部署后，在 Supabase Authentication > URL Configuration 中把 Vercel 域名加入 Site URL 和 Redirect URLs。
+6. 部署后，在 Supabase Authentication > URL Configuration 中把 Cloudflare 网址加入 Site URL 和 Redirect URLs，例如：
+
+```text
+https://你的项目名.你的账号.workers.dev
+https://你的项目名.你的账号.workers.dev/**
+```
+
+## Cloudflare 命令
+
+```bash
+npm run preview
+npm run deploy
+```
+
+`preview` 会用 Cloudflare Workers 运行时本地预览，`deploy` 会构建并发布到 Cloudflare。
 
 ## 当前功能
 
