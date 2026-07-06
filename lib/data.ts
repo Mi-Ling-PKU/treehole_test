@@ -178,13 +178,29 @@ export async function createPost(content: string) {
     throw new Error("登录后就可以发布。");
   }
 
-  const { error } = await supabase.from("posts").insert({
-    user_id: user.id,
-    content
-  });
+  const { data, error } = await supabase
+    .from("posts")
+    .insert({
+      user_id: user.id,
+      content
+    })
+    .select("id")
+    .single();
 
   if (error) {
     throw error;
+  }
+
+  const { error: favoriteError } = await supabase.from("favorites").upsert(
+    {
+      user_id: user.id,
+      post_id: data.id
+    },
+    { onConflict: "user_id,post_id" }
+  );
+
+  if (favoriteError) {
+    throw favoriteError;
   }
 }
 
