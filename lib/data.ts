@@ -97,6 +97,24 @@ async function listFavoritePosts(userId: string): Promise<PostSummary[]> {
 }
 
 async function searchPosts(query: string, userId: string, searchScope: SearchScope): Promise<PostSummary[]> {
+  const pinnedPublicNo = /^\d+$/.test(query) ? Number(query) : null;
+  let pinnedPost: Post | null = null;
+
+  if (pinnedPublicNo && Number.isSafeInteger(pinnedPublicNo)) {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("public_no", pinnedPublicNo)
+      .neq("status", "deleted")
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(getFriendlyDataMessage(error));
+    }
+
+    pinnedPost = (data as Post | null) ?? null;
+  }
+
   const { data: postMatches, error: postError } = await supabase
     .from("posts")
     .select("*")
@@ -111,7 +129,7 @@ async function searchPosts(query: string, userId: string, searchScope: SearchSco
   const directPosts = (postMatches ?? []) as Post[];
 
   if (searchScope === "posts") {
-    return withFavoriteState(directPosts, userId);
+    return withFavoriteState(prioritizePinnedPost(pinnedPost, directPosts), userId);
   }
 
   const { data: commentMatches, error: commentError } = await supabase
@@ -144,11 +162,19 @@ async function searchPosts(query: string, userId: string, searchScope: SearchSco
     commentPosts = (data ?? []) as Post[];
   }
 
-  const posts = [...directPosts, ...commentPosts]
+  const posts = prioritizePinnedPost(pinnedPost, [...directPosts, ...commentPosts])
     .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
     .slice(0, POST_PAGE_SIZE);
 
-  return withFavoriteState(posts, userId);
+  return withFavoriteState(pinnedPost ? [pinnedPost, ...posts.filter((post) => post.id !== pinnedPost.id)] : posts, userId);
+}
+
+function prioritizePinnedPost(pinnedPost: Post | null, posts: Post[]) {
+  if (!pinnedPost) {
+    return posts;
+  }
+
+  return [pinnedPost, ...posts.filter((post) => post.id !== pinnedPost.id)];
 }
 
 async function withFavoriteState(posts: Post[], userId: string): Promise<PostSummary[]> {
