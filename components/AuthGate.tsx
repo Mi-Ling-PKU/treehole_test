@@ -27,12 +27,12 @@ export function AuthGate({ children }: {
   }, []);
 
   if (loading) {
-    return <div className="rounded-md border border-ink/10 bg-panel/75 p-4 text-sm text-ink/60">正在连接社区...</div>;
+    return <div className="rounded-md border border-ink/10 bg-panel/90 p-4 text-sm text-ink/60">正在连接社区...</div>;
   }
 
   if (!user) {
     return (
-      <main className="mx-auto max-w-md px-4 py-10 sm:px-6">
+      <main className="mx-auto max-w-md px-4 py-4 sm:px-6">
         <section className="rounded-md border border-ink/10 bg-panel/90 p-6 shadow-soft">
           <h1 className="text-xl font-semibold text-ink">登录后进入树洞</h1>
           <p className="mt-2 text-sm leading-6 text-ink/60">这里需要账号才能浏览和参与，公开页面不会显示你的邮箱。</p>

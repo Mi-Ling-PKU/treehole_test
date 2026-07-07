@@ -69,7 +69,7 @@ export function PostComposer({
   return (
     <form
       onSubmit={submitPost}
-      className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/85 p-4 shadow-soft" : "space-y-3"}
+      className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/90 p-4 shadow-soft" : "space-y-3"}
     >
       <label htmlFor="post-content" className="text-sm font-semibold text-ink">
         写进树洞

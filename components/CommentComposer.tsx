@@ -77,7 +77,7 @@ export function CommentComposer({
   return (
     <form
       onSubmit={submitComment}
-      className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/85 p-4 shadow-soft" : "space-y-3"}
+      className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/90 p-4 shadow-soft" : "space-y-3"}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <label htmlFor="comment-content" className="text-sm font-semibold text-ink">

@@ -24,7 +24,7 @@ export function CommentList({
   return (
     <div className="space-y-3">
       {comments.map((comment) => (
-        <article key={comment.id} className="rounded-md border border-ink/10 bg-panel/75 p-4">
+        <article key={comment.id} className="rounded-md border border-ink/10 bg-panel/90 p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">{comment.author_name}</span>

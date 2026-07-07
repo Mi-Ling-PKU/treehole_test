@@ -109,14 +109,14 @@ export function PostDetailPanel({
 
   if (!postId) {
     return (
-      <div className="rounded-md border border-dashed border-ink/20 bg-panel/60 p-8 text-center text-sm text-ink/55">
+      <div className="rounded-md border border-dashed border-ink/20 bg-panel/90 p-8 text-center text-sm text-ink/55">
         选择一条树洞查看完整回复。
       </div>
     );
   }
 
   if (loading) {
-    return <div className="rounded-md border border-ink/10 bg-panel/75 p-4 text-sm text-ink/60">正在加载...</div>;
+    return <div className="rounded-md border border-ink/10 bg-panel/90 p-4 text-sm text-ink/60">正在加载...</div>;
   }
 
   if (error) {
@@ -133,7 +133,7 @@ export function PostDetailPanel({
 
   return (
     <section className="space-y-5">
-      <article className="rounded-md border border-ink/10 bg-panel/75 p-5 shadow-soft">
+      <article className="rounded-md border border-ink/10 bg-panel/90 p-5 shadow-soft">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">洞主</span>

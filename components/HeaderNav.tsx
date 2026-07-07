@@ -32,9 +32,9 @@ export function HeaderNav() {
   }, []);
 
   const linkClass = (active: boolean) =>
-    `rounded-md px-3 py-2 ${active ? "bg-mist text-ink" : "hover:bg-mist hover:text-ink"}`;
+    `rounded-md px-3 py-2 ${active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"}`;
   const iconLinkClass = (active: boolean) =>
-    `inline-flex items-center gap-1 rounded-md px-3 py-2 ${active ? "bg-mist text-ink" : "hover:bg-mist hover:text-ink"}`;
+    `inline-flex items-center gap-1 rounded-md px-3 py-2 ${active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"}`;
 
   return (
     <nav className="flex flex-wrap items-center justify-start gap-1 text-sm font-medium text-ink/70">

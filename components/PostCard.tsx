@@ -29,7 +29,7 @@ export function PostCard({
   onDeleted?: () => void;
 }) {
   return (
-    <article className={`rounded-md border bg-panel/75 p-4 shadow-soft ${selected ? "border-moss/55" : "border-ink/10"}`}>
+    <article className={`rounded-md border bg-panel/90 p-4 shadow-soft ${selected ? "border-moss/55" : "border-ink/10"}`}>
       <button type="button" onClick={onSelect} className="block w-full text-left">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm font-semibold text-moss">#{post.public_no}</span>

@@ -68,7 +68,7 @@ export default function AdminPage() {
 
   return (
     <AuthGate>
-      <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
         <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
           <ArrowLeft size={16} aria-hidden="true" />
           返回广场
@@ -95,7 +95,7 @@ export default function AdminPage() {
         {message ? <p className="mb-4 rounded-md bg-clay/10 p-3 text-sm text-clay">{message}</p> : null}
 
         {!loading && !isAdmin ? (
-          <div className="rounded-md border border-ink/10 bg-panel/85 p-5 shadow-soft">
+          <div className="rounded-md border border-ink/10 bg-panel/90 p-5 shadow-soft">
             <div className="flex items-center gap-2 font-semibold text-ink">
               <ShieldAlert size={18} aria-hidden="true" />
               你目前不能访问这个页面

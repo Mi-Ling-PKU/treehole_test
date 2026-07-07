@@ -44,7 +44,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="mx-auto max-w-md px-4 py-8 sm:px-6">
+    <main className="mx-auto max-w-md px-4 py-4 sm:px-6">
       <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
         返回广场

@@ -124,7 +124,7 @@ export function PostBoard({
           </ComposerDrawer>
         ) : null}
 
-        <form onSubmit={submitSearch} className="flex flex-wrap items-center gap-2">
+        <form onSubmit={submitSearch} className="flex flex-wrap items-center gap-2 rounded-md border border-ink/10 bg-panel/90 p-2 shadow-soft">
           {showComposer ? (
             <button
               type="button"
