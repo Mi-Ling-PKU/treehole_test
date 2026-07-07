@@ -69,15 +69,15 @@ export default function AdminPage() {
   return (
     <AuthGate>
       <main className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
-        <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
+        <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
           <ArrowLeft size={16} aria-hidden="true" />
           返回广场
         </Link>
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-semibold text-ink">内容审核</h1>
-            <p className="mt-2 text-sm text-ink/60">处理举报、折叠内容、删除内容或暂时限制违规账号。</p>
+            <h1 className="text-2xl font-semibold text-white">内容审核</h1>
+            <p className="mt-2 text-sm text-white/75">处理举报、折叠内容、删除内容或暂时限制违规账号。</p>
           </div>
           {isAdmin ? (
             <button
@@ -91,7 +91,7 @@ export default function AdminPage() {
           ) : null}
         </div>
 
-        {loading ? <p className="text-sm text-ink/55">正在加载...</p> : null}
+        {loading ? <p className="text-sm text-white/75">正在加载...</p> : null}
         {message ? <p className="mb-4 rounded-md bg-clay/10 p-3 text-sm text-clay">{message}</p> : null}
 
         {!loading && !isAdmin ? (

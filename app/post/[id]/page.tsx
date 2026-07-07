@@ -12,7 +12,7 @@ export default function PostDetailPage() {
   return (
     <AuthGate>
       <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
-        <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
+        <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
           <ArrowLeft size={16} aria-hidden="true" />
           返回广场
         </Link>

@@ -210,11 +210,11 @@ export function PostDetailPanel({
 
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-semibold text-ink">回复 {detail.comments.length}</h2>
+          <h2 className="text-base font-semibold text-white">回复 {detail.comments.length}</h2>
           <button
             type="button"
             onClick={() => setReplySort((value) => (value === "asc" ? "desc" : "asc"))}
-            className="inline-flex items-center gap-1 rounded-md border border-ink/10 px-2 py-1 text-xs font-semibold text-ink/70 hover:bg-mist"
+            className="inline-flex items-center gap-1 rounded-md border border-white/25 px-2 py-1 text-xs font-semibold text-white/85 hover:bg-white/10 hover:text-white"
           >
             {replySort === "asc" ? <ArrowDownAZ size={14} aria-hidden="true" /> : <ArrowUpAZ size={14} aria-hidden="true" />}
             {replySort === "asc" ? "顺序" : "逆序"}

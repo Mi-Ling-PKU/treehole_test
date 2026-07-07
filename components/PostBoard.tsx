@@ -91,7 +91,7 @@ export function PostBoard({
         <button
           type="button"
           onClick={() => setSelectedId(null)}
-          className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink"
+          className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white"
         >
           <ArrowLeft size={16} aria-hidden="true" />
           返回广场
@@ -112,8 +112,8 @@ export function PostBoard({
         {title || description ? (
           <div className="flex items-start justify-between gap-3">
             <div>
-              {title ? <h1 className="text-2xl font-semibold text-ink">{title}</h1> : null}
-              {description ? <p className="mt-2 text-sm leading-6 text-ink/60">{description}</p> : null}
+              {title ? <h1 className="text-2xl font-semibold text-white">{title}</h1> : null}
+              {description ? <p className="mt-2 text-sm leading-6 text-white/75">{description}</p> : null}
             </div>
           </div>
         ) : null}
@@ -187,12 +187,12 @@ export function PostBoard({
           </div>
         </form>
         {activeQuery ? (
-          <button type="button" onClick={clearSearch} className="rounded-md px-2 py-1 text-xs font-medium text-ink/55 hover:bg-mist hover:text-ink">
+          <button type="button" onClick={clearSearch} className="rounded-md px-2 py-1 text-xs font-medium text-white/75 hover:bg-white/10 hover:text-white">
             清除搜索：{activeQuery}
           </button>
         ) : null}
 
-        {loading ? <p className="text-sm text-ink/55">正在加载...</p> : null}
+        {loading ? <p className="text-sm text-white/75">正在加载...</p> : null}
         {error ? <p className="rounded-md bg-clay/10 p-3 text-sm text-clay">{error}</p> : null}
         {!loading && !error && posts.length === 0 ? (
           <EmptyState title={mode === "favorites" ? "还没有关注" : "还没有内容"} text={mode === "favorites" ? "关注树洞后，它们会出现在这里。" : "发布第一条内容后，它会出现在这里。"} />

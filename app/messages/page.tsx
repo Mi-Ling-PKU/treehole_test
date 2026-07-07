@@ -99,15 +99,15 @@ export default function MessagesPage() {
   return (
     <AuthGate>
       <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
-        <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
+        <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
           <ArrowLeft size={16} aria-hidden="true" />
           返回广场
         </Link>
 
         <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-semibold text-ink">消息</h1>
-            <p className="mt-2 text-sm text-ink/60">回复提醒和站点通知会出现在这里。</p>
+            <h1 className="text-2xl font-semibold text-white">消息</h1>
+            <p className="mt-2 text-sm text-white/75">回复提醒和站点通知会出现在这里。</p>
           </div>
           <button
             type="button"
@@ -118,7 +118,7 @@ export default function MessagesPage() {
           </button>
         </div>
 
-        {loading ? <p className="text-sm text-ink/55">正在加载...</p> : null}
+        {loading ? <p className="text-sm text-white/75">正在加载...</p> : null}
         {error ? <p className="mb-4 rounded-md bg-clay/10 p-3 text-sm text-clay">{error}</p> : null}
         {!loading && !error && messages.length === 0 ? <EmptyState title="还没有消息" text="有新的回复或通知时会显示在这里。" /> : null}
 
