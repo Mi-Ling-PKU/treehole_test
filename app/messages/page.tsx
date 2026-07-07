@@ -35,6 +35,21 @@ export default function MessagesPage() {
 
   useEffect(() => {
     loadMessages();
+
+    const intervalId = window.setInterval(loadMessages, 15000);
+
+    function refreshWhenVisible() {
+      if (document.visibilityState === "visible") {
+        loadMessages();
+      }
+    }
+
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
   }, []);
 
   async function markRead(messageId: string) {
@@ -47,8 +62,8 @@ export default function MessagesPage() {
   }
 
   return (
-    <AuthGate>
-      <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
+    <AuthGate barMaxWidthClassName="max-w-3xl">
+      <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
         <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
           <ArrowLeft size={16} aria-hidden="true" />
           返回广场
