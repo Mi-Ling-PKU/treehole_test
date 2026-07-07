@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bell, Shield, Star } from "lucide-react";
 import { isCurrentUserAdmin } from "@/lib/data";
@@ -8,6 +9,7 @@ import { supabase } from "@/lib/supabase";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function HeaderNav() {
+  const pathname = usePathname();
   const [showAdmin, setShowAdmin] = useState(false);
 
   useEffect(() => {
@@ -29,21 +31,26 @@ export function HeaderNav() {
     };
   }, []);
 
+  const linkClass = (active: boolean) =>
+    `rounded-md px-3 py-2 ${active ? "bg-mist text-ink" : "hover:bg-mist hover:text-ink"}`;
+  const iconLinkClass = (active: boolean) =>
+    `inline-flex items-center gap-1 rounded-md px-3 py-2 ${active ? "bg-mist text-ink" : "hover:bg-mist hover:text-ink"}`;
+
   return (
     <nav className="flex flex-wrap items-center justify-end gap-1 text-sm font-medium text-ink/70">
-      <Link className="rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/">
+      <Link className={linkClass(pathname === "/" || pathname.startsWith("/post/"))} href="/">
         广场
       </Link>
-      <Link className="inline-flex items-center gap-1 rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/favorites">
+      <Link className={iconLinkClass(pathname === "/favorites")} href="/favorites">
         <Star size={15} aria-hidden="true" />
         关注
       </Link>
-      <Link className="inline-flex items-center gap-1 rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/messages">
+      <Link className={iconLinkClass(pathname === "/messages")} href="/messages">
         <Bell size={15} aria-hidden="true" />
         消息
       </Link>
       {showAdmin ? (
-        <Link className="inline-flex items-center gap-1 rounded-md px-3 py-2 hover:bg-mist hover:text-ink" href="/admin">
+        <Link className={iconLinkClass(pathname === "/admin")} href="/admin">
           <Shield size={15} aria-hidden="true" />
           审核
         </Link>

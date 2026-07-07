@@ -16,12 +16,16 @@ export function PostBoard({
   title,
   description,
   showComposer,
+  composerOpen: controlledComposerOpen,
+  onComposerOpenChange,
   layout = "split"
 }: {
   mode: "all" | "favorites";
   title?: string;
   description?: string;
   showComposer?: boolean;
+  composerOpen?: boolean;
+  onComposerOpenChange?: (open: boolean) => void;
   layout?: "split" | "centered";
 }) {
   const [posts, setPosts] = useState<PostSummary[]>([]);
@@ -30,10 +34,13 @@ export function PostBoard({
   const [activeQuery, setActiveQuery] = useState("");
   const [searchScope, setSearchScope] = useState<SearchScope>("all");
   const [searchSettingsOpen, setSearchSettingsOpen] = useState(false);
-  const [composerOpen, setComposerOpen] = useState(false);
+  const [internalComposerOpen, setInternalComposerOpen] = useState(false);
   const [detailReplyOpen, setDetailReplyOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const composerOpen = controlledComposerOpen ?? internalComposerOpen;
+  const setComposerOpen = onComposerOpenChange ?? setInternalComposerOpen;
+  const showInlineComposerButton = showComposer && !onComposerOpenChange;
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
@@ -103,13 +110,13 @@ export function PostBoard({
   return (
     <main className={layout === "centered" ? "mx-auto max-w-3xl px-4 py-4 sm:px-6" : "mx-auto grid max-w-6xl gap-5 px-4 py-4 sm:px-6 lg:grid-cols-[360px_1fr]"}>
       <section className="space-y-4">
-        {title || description || showComposer ? (
+        {title || description || showInlineComposerButton ? (
           <div className="flex items-start justify-between gap-3">
             <div>
               {title ? <h1 className="text-2xl font-semibold text-ink">{title}</h1> : null}
               {description ? <p className="mt-2 text-sm leading-6 text-ink/60">{description}</p> : null}
             </div>
-            {showComposer ? (
+            {showInlineComposerButton ? (
               <button
                 type="button"
                 onClick={() => setComposerOpen(true)}
