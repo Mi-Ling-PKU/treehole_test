@@ -8,27 +8,26 @@ import type { ReportTargetType } from "@/lib/types";
 export function ReportButton({ targetType, targetId }: { targetType: ReportTargetType; targetId: string }) {
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
-  const [status, setStatus] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  async function submitReport() {
+  async function submit() {
     if (!reason.trim()) {
-      setStatus("请填写举报原因。");
+      setMessage("请写下举报原因。");
       return;
     }
 
-    setSubmitting(true);
-    setStatus(null);
-
+    setBusy(true);
+    setMessage(null);
     try {
       await createReport(targetType, targetId, reason.trim());
       setReason("");
       setOpen(false);
-      setStatus("已提交举报。");
+      setMessage("已收到举报。");
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "暂时提交不了举报，请稍后再试。");
+      setMessage(error instanceof Error ? error.message : "暂时提交不了举报，请稍后再试。");
     } finally {
-      setSubmitting(false);
+      setBusy(false);
     }
   }
 
@@ -48,30 +47,20 @@ export function ReportButton({ targetType, targetId }: { targetType: ReportTarge
             value={reason}
             onChange={(event) => setReason(event.target.value)}
             rows={3}
-            maxLength={600}
-            placeholder="简要说明原因"
+            placeholder="说明你认为需要处理的原因"
             className="focus-ring w-full rounded-md border border-ink/15 bg-paper px-3 py-2 text-sm"
           />
-          <div className="mt-2 flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="rounded-md px-3 py-2 text-sm font-medium text-ink/60 hover:bg-mist"
-            >
+          <div className="mt-2 flex justify-end gap-2">
+            <button type="button" onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm text-ink/60 hover:bg-mist">
               取消
             </button>
-            <button
-              type="button"
-              disabled={submitting}
-              onClick={submitReport}
-              className="rounded-md bg-clay px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
-            >
+            <button type="button" disabled={busy} onClick={submit} className="rounded-md bg-clay px-3 py-2 text-sm font-semibold text-white disabled:opacity-50">
               提交
             </button>
           </div>
         </div>
       ) : null}
-      {status ? <p className="text-xs text-ink/55">{status}</p> : null}
+      {message ? <p className="text-xs text-ink/55">{message}</p> : null}
     </div>
   );
 }

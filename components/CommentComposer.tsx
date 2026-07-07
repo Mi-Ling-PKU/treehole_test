@@ -1,24 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Send, X } from "lucide-react";
 import { createComment } from "@/lib/data";
-import type { CommentWithReply } from "@/lib/types";
+import type { CommentView } from "@/lib/types";
 
 export function CommentComposer({
   postId,
   replyingTo,
   onCancelReply,
-  onCreated
+  onCreated,
+  surface = "card",
+  draftKey
 }: {
   postId: string;
-  replyingTo: CommentWithReply | null;
+  replyingTo: CommentView | null;
   onCancelReply: () => void;
   onCreated: () => void;
+  surface?: "card" | "plain";
+  draftKey?: string;
 }) {
   const [content, setContent] = useState("");
+  const [loadedDraftKey, setLoadedDraftKey] = useState<string | null>(draftKey ?? null);
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!draftKey) {
+      setLoadedDraftKey(null);
+      return;
+    }
+
+    setContent(window.localStorage.getItem(draftKey) ?? "");
+    setLoadedDraftKey(draftKey);
+  }, [draftKey]);
+
+  useEffect(() => {
+    if (!draftKey || loadedDraftKey !== draftKey) {
+      return;
+    }
+
+    if (content) {
+      window.localStorage.setItem(draftKey, content);
+    } else {
+      window.localStorage.removeItem(draftKey);
+    }
+  }, [content, draftKey, loadedDraftKey]);
 
   async function submitComment(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,6 +60,9 @@ export function CommentComposer({
 
     try {
       await createComment(postId, content.trim(), replyingTo?.id ?? null);
+      if (draftKey) {
+        window.localStorage.removeItem(draftKey);
+      }
       setContent("");
       onCancelReply();
       setStatus("已回复。");
@@ -45,7 +75,10 @@ export function CommentComposer({
   }
 
   return (
-    <form onSubmit={submitComment} className="rounded-md border border-ink/10 bg-panel/85 p-4 shadow-soft">
+    <form
+      onSubmit={submitComment}
+      className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/85 p-4 shadow-soft" : "space-y-3"}
+    >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <label htmlFor="comment-content" className="text-sm font-semibold text-ink">
           写回复
@@ -56,7 +89,7 @@ export function CommentComposer({
             onClick={onCancelReply}
             className="inline-flex items-center gap-1 rounded-md bg-mist px-2 py-1 text-xs font-medium text-ink/65 hover:text-ink"
           >
-            回复 #R{replyingTo.public_no}
+            回复 {replyingTo.author_name} #{replyingTo.sequence}
             <X size={13} aria-hidden="true" />
           </button>
         ) : null}
@@ -66,12 +99,10 @@ export function CommentComposer({
         value={content}
         onChange={(event) => setContent(event.target.value)}
         rows={4}
-        maxLength={1200}
-        placeholder={replyingTo ? `回复 #R${replyingTo.public_no}` : "回应主帖"}
+        placeholder={replyingTo ? `回复 ${replyingTo.author_name} #${replyingTo.sequence}` : "回应这个树洞"}
         className="focus-ring mt-3 w-full rounded-md border border-ink/15 bg-paper px-3 py-3 text-sm leading-6"
       />
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-        <span className="text-xs text-ink/50">{content.length}/1200</span>
+      <div className="mt-3 flex flex-wrap items-center justify-end gap-3">
         <button
           type="submit"
           disabled={submitting}

@@ -1,57 +1,72 @@
-import type { CommentWithReply } from "@/lib/types";
-
 const ANONYMOUS_NAMES = [
   "Alice",
   "Bob",
   "Carol",
-  "David",
-  "Emma",
-  "Frank",
+  "Dave",
+  "Eve",
+  "Francis",
   "Grace",
-  "Henry",
-  "Iris",
-  "Jack",
+  "Hans",
+  "Isabella",
+  "Jason",
   "Kate",
-  "Leo",
-  "Mia",
-  "Noah",
+  "Louis",
+  "Margaret",
+  "Nathan",
   "Olivia",
   "Paul",
-  "Quinn",
-  "Rose",
-  "Sam",
-  "Tina",
+  "Queen",
+  "Richard",
+  "Susan",
+  "Thomas",
   "Uma",
-  "Victor",
-  "Wendy",
+  "Vivian",
+  "Winnie",
   "Xander",
-  "Yara",
-  "Zoe"
+  "Yasmine",
+  "Zach"
 ];
 
-export function buildAnonymousNameMap(comments: CommentWithReply[], postAuthorId: string) {
-  const namesByUserId = new Map<string, string>();
-  let nextGuestIndex = 0;
+const MODIFIERS = [
+  "Angry",
+  "Baby",
+  "Crazy",
+  "Diligent",
+  "Excited",
+  "Fat",
+  "Greedy",
+  "Hungry",
+  "Interesting",
+  "Jolly",
+  "Kind",
+  "Little",
+  "Magic",
+  "Naive",
+  "Old",
+  "PKU",
+  "Quiet",
+  "Rich",
+  "Superman",
+  "THU",
+  "Undefined",
+  "Valuable",
+  "Wifeless",
+  "Xenial",
+  "Young",
+  "Zombie"
+];
 
-  for (const comment of comments) {
-    if (comment.user_id === postAuthorId) {
-      namesByUserId.set(comment.user_id, "OP");
-      continue;
-    }
-
-    if (!namesByUserId.has(comment.user_id)) {
-      namesByUserId.set(comment.user_id, getGuestName(nextGuestIndex));
-      nextGuestIndex += 1;
-    }
-  }
-
-  return namesByUserId;
-}
-
-function getGuestName(index: number) {
+export function getGuestName(index: number) {
   if (index < ANONYMOUS_NAMES.length) {
     return ANONYMOUS_NAMES[index];
   }
 
-  return `Mr.${index + 1}`;
+  const modifierIndex = Math.floor(index / ANONYMOUS_NAMES.length) - 1;
+  const name = ANONYMOUS_NAMES[index % ANONYMOUS_NAMES.length];
+
+  if (modifierIndex < MODIFIERS.length) {
+    return `${MODIFIERS[modifierIndex]} ${name}`;
+  }
+
+  return `You Win ${index}`;
 }

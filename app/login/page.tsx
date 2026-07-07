@@ -47,13 +47,13 @@ export default function LoginPage() {
     <main className="mx-auto max-w-md px-4 py-8 sm:px-6">
       <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
         <ArrowLeft size={16} aria-hidden="true" />
-        返回首页
+        返回广场
       </Link>
 
       <section className="rounded-md border border-ink/10 bg-panel/90 p-6 shadow-soft">
         <div className="mb-6">
           <h1 className="text-xl font-semibold text-ink">{mode === "login" ? "登录" : "注册"}</h1>
-          <p className="mt-2 text-sm leading-6 text-ink/60">账号只用于保存收藏和你的个人状态，公开页面不会显示邮箱。</p>
+          <p className="mt-2 text-sm leading-6 text-ink/60">账号只用于保存你的参与状态，公开页面不会显示邮箱。</p>
         </div>
 
         <div className="mb-5 grid grid-cols-2 rounded-md bg-mist p-1">
