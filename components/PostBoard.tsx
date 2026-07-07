@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Plus, Search } from "lucide-react";
+import { ArrowLeft, Plus, Search, Settings2 } from "lucide-react";
 import { ComposerDrawer } from "@/components/ComposerDrawer";
 import { EmptyState } from "@/components/EmptyState";
 import { PostCard } from "@/components/PostCard";
@@ -29,6 +29,7 @@ export function PostBoard({
   const [query, setQuery] = useState("");
   const [activeQuery, setActiveQuery] = useState("");
   const [searchScope, setSearchScope] = useState<SearchScope>("all");
+  const [searchSettingsOpen, setSearchSettingsOpen] = useState(false);
   const [composerOpen, setComposerOpen] = useState(false);
   const [detailReplyOpen, setDetailReplyOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -137,26 +138,46 @@ export function PostBoard({
           />
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-md bg-moss px-3 py-2 text-sm font-semibold text-white hover:bg-moss/90"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-moss text-white hover:bg-moss/90"
+            aria-label="搜索"
+            title="搜索"
           >
             <Search size={16} aria-hidden="true" />
-            搜索
           </button>
-          <div className="inline-grid grid-cols-2 rounded-md bg-mist p-1 text-xs font-semibold">
+          <div className="relative">
             <button
               type="button"
-              onClick={() => setSearchScope("posts")}
-              className={`rounded-md px-3 py-2 ${searchScope === "posts" ? "bg-panel text-ink shadow-sm" : "text-ink/60"}`}
+              onClick={() => setSearchSettingsOpen((value) => !value)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-ink/10 bg-panel text-ink/70 hover:bg-mist hover:text-ink"
+              aria-label="搜索设置"
+              title="搜索设置"
             >
-              只搜树洞
+              <Settings2 size={16} aria-hidden="true" />
             </button>
-            <button
-              type="button"
-              onClick={() => setSearchScope("all")}
-              className={`rounded-md px-3 py-2 ${searchScope === "all" ? "bg-panel text-ink shadow-sm" : "text-ink/60"}`}
-            >
-              树洞和回复
-            </button>
+            {searchSettingsOpen ? (
+              <div className="absolute right-0 top-11 z-20 w-40 rounded-md border border-ink/10 bg-panel p-1 text-sm shadow-soft">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchScope("posts");
+                    setSearchSettingsOpen(false);
+                  }}
+                  className={`block w-full rounded-md px-3 py-2 text-left ${searchScope === "posts" ? "bg-mist text-ink" : "text-ink/65 hover:bg-mist hover:text-ink"}`}
+                >
+                  搜索树洞
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchScope("all");
+                    setSearchSettingsOpen(false);
+                  }}
+                  className={`block w-full rounded-md px-3 py-2 text-left ${searchScope === "all" ? "bg-mist text-ink" : "text-ink/65 hover:bg-mist hover:text-ink"}`}
+                >
+                  搜索树洞和回复
+                </button>
+              </div>
+            ) : null}
           </div>
         </form>
         {activeQuery ? (
