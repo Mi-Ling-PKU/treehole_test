@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Check, Mail, MailOpen } from "lucide-react";
 import { AuthGate } from "@/components/AuthGate";
 import { EmptyState } from "@/components/EmptyState";
-import { listMessages, markMessageRead, markMessageUnread } from "@/lib/data";
+import { listMessages, markAllMessagesRead, markMessageRead, markMessageUnread } from "@/lib/data";
 import type { Message } from "@/lib/types";
 
 const formatter = new Intl.DateTimeFormat("zh-CN", {
@@ -72,6 +72,15 @@ export default function MessagesPage() {
     }
   }
 
+  async function markAllRead() {
+    try {
+      await markAllMessagesRead();
+      await loadMessages();
+    } catch (markError) {
+      setError(markError instanceof Error ? markError.message : "暂时无法全部标记已读。");
+    }
+  }
+
   async function openMessage(message: Message) {
     if (!message.post_id) {
       return;
@@ -95,9 +104,18 @@ export default function MessagesPage() {
           返回广场
         </Link>
 
-        <div className="mb-5">
-          <h1 className="text-2xl font-semibold text-ink">消息</h1>
-          <p className="mt-2 text-sm text-ink/60">回复提醒和站点通知会出现在这里。</p>
+        <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-semibold text-ink">消息</h1>
+            <p className="mt-2 text-sm text-ink/60">回复提醒和站点通知会出现在这里。</p>
+          </div>
+          <button
+            type="button"
+            onClick={markAllRead}
+            className="rounded-md border border-ink/10 bg-panel px-3 py-2 text-sm font-semibold text-ink/70 hover:bg-mist hover:text-ink"
+          >
+            全部已读
+          </button>
         </div>
 
         {loading ? <p className="text-sm text-ink/55">正在加载...</p> : null}

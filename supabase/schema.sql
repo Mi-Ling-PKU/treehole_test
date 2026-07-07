@@ -7,6 +7,7 @@ drop function if exists public.create_report(text, uuid, text) cascade;
 drop function if exists public.review_report(uuid, text) cascade;
 drop function if exists public.moderate_content(text, uuid, text, text, boolean, timestamptz) cascade;
 drop function if exists public.mark_message_read(uuid) cascade;
+drop function if exists public.mark_all_messages_read() cascade;
 drop function if exists public.mark_message_unread(uuid) cascade;
 drop function if exists public.is_admin() cascade;
 drop function if exists public.touch_updated_at() cascade;
@@ -512,6 +513,23 @@ begin
   update public.messages
   set read_at = coalesce(read_at, now())
   where id = p_message_id and user_id = auth.uid();
+end;
+$$;
+
+create or replace function public.mark_all_messages_read()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'AUTH_REQUIRED';
+  end if;
+
+  update public.messages
+  set read_at = coalesce(read_at, now())
+  where user_id = auth.uid() and read_at is null;
 end;
 $$;
 

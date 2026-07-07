@@ -289,6 +289,13 @@ export async function markMessageRead(messageId: string) {
   }
 }
 
+export async function markAllMessagesRead() {
+  const { error } = await supabase.rpc("mark_all_messages_read");
+  if (error) {
+    throw new Error(getFriendlyDataMessage(error));
+  }
+}
+
 export async function markMessageUnread(messageId: string) {
   const { error } = await supabase.rpc("mark_message_unread", { p_message_id: messageId });
   if (error) {
