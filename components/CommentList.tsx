@@ -1,6 +1,7 @@
 "use client";
 
 import { MessageSquareReply } from "lucide-react";
+import { DeleteButton } from "@/components/DeleteButton";
 import { ReportButton } from "@/components/ReportButton";
 import type { CommentView } from "@/lib/types";
 
@@ -13,10 +14,12 @@ const formatter = new Intl.DateTimeFormat("zh-CN", {
 
 export function CommentList({
   comments,
-  onReply
+  onReply,
+  onDeleted
 }: {
   comments: CommentView[];
   onReply: (comment: CommentView) => void;
+  onDeleted?: () => void;
 }) {
   return (
     <div className="space-y-3">
@@ -49,7 +52,10 @@ export function CommentList({
               <MessageSquareReply size={14} aria-hidden="true" />
               回复
             </button>
-            <ReportButton targetType="comment" targetId={comment.id} />
+            <div className="flex items-start gap-2">
+              <DeleteButton targetType="comment" targetId={comment.id} authorId={comment.author_id} onDeleted={onDeleted} />
+              <ReportButton targetType="comment" targetId={comment.id} />
+            </div>
           </div>
         </article>
       ))}

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { MessageCircleHeart } from "lucide-react";
 import { HeaderNav } from "@/components/HeaderNav";
 import { HeaderUser } from "@/components/HeaderUser";
 import "./globals.css";
@@ -23,16 +21,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div className="min-h-screen">
           <header className="border-b border-ink/10 bg-paper/85 backdrop-blur">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
-              <Link href="/" className="flex items-center gap-2 text-lg font-semibold text-ink">
-                <span className="grid h-9 w-9 place-items-center rounded-md bg-moss text-white">
-                  <MessageCircleHeart size={20} aria-hidden="true" />
-                </span>
-                树洞
-              </Link>
-              <div className="flex flex-wrap items-center justify-end gap-3">
-                <HeaderNav />
-                <HeaderUser />
-              </div>
+              <HeaderNav />
+              <HeaderUser />
             </div>
           </header>
           {children}

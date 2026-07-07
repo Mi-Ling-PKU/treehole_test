@@ -267,6 +267,17 @@ export async function createReport(targetType: ReportTargetType, targetId: strin
   }
 }
 
+export async function deleteOwnContent(targetType: ReportTargetType, targetId: string) {
+  assertSupabaseConfigured();
+  const { error } = await supabase.rpc("delete_own_content", {
+    p_target_type: targetType,
+    p_target_id: targetId
+  });
+  if (error) {
+    throw new Error(getFriendlyDataMessage(error));
+  }
+}
+
 export async function listMessages(): Promise<Message[]> {
   assertSupabaseConfigured();
   const { data, error } = await supabase

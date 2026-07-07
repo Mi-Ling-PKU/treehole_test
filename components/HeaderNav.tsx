@@ -37,7 +37,7 @@ export function HeaderNav() {
     `inline-flex items-center gap-1 rounded-md px-3 py-2 ${active ? "bg-mist text-ink" : "hover:bg-mist hover:text-ink"}`;
 
   return (
-    <nav className="flex flex-wrap items-center justify-end gap-1 text-sm font-medium text-ink/70">
+    <nav className="flex flex-wrap items-center justify-start gap-1 text-sm font-medium text-ink/70">
       <Link className={linkClass(pathname === "/" || pathname.startsWith("/post/"))} href="/">
         广场
       </Link>

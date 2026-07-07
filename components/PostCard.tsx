@@ -1,6 +1,7 @@
 "use client";
 
 import { Clock, MessageSquare } from "lucide-react";
+import { DeleteButton } from "@/components/DeleteButton";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { ReportButton } from "@/components/ReportButton";
 import type { PostSummary } from "@/lib/types";
@@ -17,13 +18,15 @@ export function PostCard({
   selected,
   onSelect,
   onReplySelect,
-  onFavoriteChanged
+  onFavoriteChanged,
+  onDeleted
 }: {
   post: PostSummary;
   selected?: boolean;
   onSelect: () => void;
   onReplySelect?: () => void;
   onFavoriteChanged?: () => void;
+  onDeleted?: () => void;
 }) {
   return (
     <article className={`rounded-md border bg-panel/75 p-4 shadow-soft ${selected ? "border-moss/55" : "border-ink/10"}`}>
@@ -60,7 +63,10 @@ export function PostCard({
             {post.is_favorited ? <span className="text-xs font-medium text-clay">已关注</span> : null}
           </div>
         </div>
-        <ReportButton targetType="post" targetId={post.id} />
+        <div className="flex items-start gap-2">
+          <DeleteButton targetType="post" targetId={post.id} authorId={post.author_id} onDeleted={onDeleted} />
+          <ReportButton targetType="post" targetId={post.id} />
+        </div>
       </div>
     </article>
   );

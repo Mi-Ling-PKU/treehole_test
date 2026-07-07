@@ -5,6 +5,7 @@ import { ArrowDownAZ, ArrowUpAZ, Clock, MessageSquareReply, X } from "lucide-rea
 import { CommentComposer } from "@/components/CommentComposer";
 import { CommentList } from "@/components/CommentList";
 import { ComposerDrawer } from "@/components/ComposerDrawer";
+import { DeleteButton } from "@/components/DeleteButton";
 import { EmptyState } from "@/components/EmptyState";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { ReportButton } from "@/components/ReportButton";
@@ -71,6 +72,11 @@ export function PostDetailPanel({
     setReplyOpen(false);
     setReplyingTo(null);
     await refreshAll();
+  }
+
+  async function handlePostDeleted() {
+    onClose?.();
+    onChanged?.();
   }
 
   function openPostReply() {
@@ -167,7 +173,15 @@ export function PostDetailPanel({
             />
             {detail.post.is_favorited ? <span className="text-xs font-medium text-clay">已关注</span> : null}
           </div>
-          <ReportButton targetType="post" targetId={detail.post.id} />
+          <div className="flex items-start gap-2">
+            <DeleteButton
+              targetType="post"
+              targetId={detail.post.id}
+              authorId={detail.post.author_id}
+              onDeleted={handlePostDeleted}
+            />
+            <ReportButton targetType="post" targetId={detail.post.id} />
+          </div>
         </div>
       </article>
 
@@ -207,7 +221,7 @@ export function PostDetailPanel({
           </button>
         </div>
         {detail.comments.length === 0 ? <EmptyState title="还没有回复" text="你可以留下第一条回应。" /> : null}
-        <CommentList comments={sortedComments} onReply={openCommentReply} />
+        <CommentList comments={sortedComments} onReply={openCommentReply} onDeleted={refreshAll} />
       </section>
     </section>
   );
