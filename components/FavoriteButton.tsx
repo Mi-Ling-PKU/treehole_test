@@ -6,10 +6,12 @@ import { setFavorite } from "@/lib/data";
 
 export function FavoriteButton({
   postId,
+  count,
   initialFavorited,
   onChanged
 }: {
   postId: string;
+  count: number;
   initialFavorited: boolean;
   onChanged?: () => void;
 }) {
@@ -41,7 +43,7 @@ export function FavoriteButton({
       } disabled:opacity-50`}
     >
       <Star size={14} fill={favorited ? "currentColor" : "none"} aria-hidden="true" />
-      {favorited ? "已关注" : "关注"}
+      <span>{count}</span>
     </button>
   );
 }

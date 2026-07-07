@@ -50,7 +50,15 @@ export function PostCard({
           {post.status === "folded" ? (
             <span className="rounded-md bg-clay/10 px-2 py-1 text-xs font-medium text-clay">已折叠</span>
           ) : null}
-          <FavoriteButton postId={post.id} initialFavorited={post.is_favorited} onChanged={onFavoriteChanged} />
+          <div className="flex items-center gap-2">
+            <FavoriteButton
+              postId={post.id}
+              count={post.favorite_count}
+              initialFavorited={post.is_favorited}
+              onChanged={onFavoriteChanged}
+            />
+            {post.is_favorited ? <span className="text-xs font-medium text-clay">已关注</span> : null}
+          </div>
         </div>
         <ReportButton targetType="post" targetId={post.id} />
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Clock, MessageSquareReply, X } from "lucide-react";
+import { ArrowDownAZ, ArrowUpAZ, Clock, MessageSquareReply, X } from "lucide-react";
 import { CommentComposer } from "@/components/CommentComposer";
 import { CommentList } from "@/components/CommentList";
 import { ComposerDrawer } from "@/components/ComposerDrawer";
@@ -33,6 +33,7 @@ export function PostDetailPanel({
   const [detail, setDetail] = useState<PostDetail | null>(null);
   const [replyingTo, setReplyingTo] = useState<CommentView | null>(null);
   const [replyOpen, setReplyOpen] = useState(initialReplyOpen);
+  const [replySort, setReplySort] = useState<"asc" | "desc">("asc");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -57,6 +58,7 @@ export function PostDetailPanel({
   useEffect(() => {
     setReplyingTo(null);
     setReplyOpen(initialReplyOpen);
+    setReplySort("asc");
     loadDetail();
   }, [initialReplyOpen, loadDetail]);
 
@@ -119,6 +121,10 @@ export function PostDetailPanel({
     return <EmptyState title="没有找到这个树洞" text="它可能已被删除。" />;
   }
 
+  const sortedComments = [...detail.comments].sort((a, b) =>
+    replySort === "asc" ? a.sequence - b.sequence : b.sequence - a.sequence
+  );
+
   return (
     <section className="space-y-5">
       <article className="rounded-md border border-ink/10 bg-panel/90 p-5 shadow-soft">
@@ -153,7 +159,13 @@ export function PostDetailPanel({
               <MessageSquareReply size={14} aria-hidden="true" />
               回复
             </button>
-            <FavoriteButton postId={detail.post.id} initialFavorited={detail.post.is_favorited} onChanged={refreshAll} />
+            <FavoriteButton
+              postId={detail.post.id}
+              count={detail.post.favorite_count}
+              initialFavorited={detail.post.is_favorited}
+              onChanged={refreshAll}
+            />
+            {detail.post.is_favorited ? <span className="text-xs font-medium text-clay">已关注</span> : null}
           </div>
           <ReportButton targetType="post" targetId={detail.post.id} />
         </div>
@@ -183,9 +195,19 @@ export function PostDetailPanel({
       ) : null}
 
       <section className="space-y-3">
-        <h2 className="text-base font-semibold text-ink">回复 {detail.comments.length}</h2>
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-base font-semibold text-ink">回复 {detail.comments.length}</h2>
+          <button
+            type="button"
+            onClick={() => setReplySort((value) => (value === "asc" ? "desc" : "asc"))}
+            className="inline-flex items-center gap-1 rounded-md border border-ink/10 px-2 py-1 text-xs font-semibold text-ink/70 hover:bg-mist"
+          >
+            {replySort === "asc" ? <ArrowDownAZ size={14} aria-hidden="true" /> : <ArrowUpAZ size={14} aria-hidden="true" />}
+            {replySort === "asc" ? "顺序" : "逆序"}
+          </button>
+        </div>
         {detail.comments.length === 0 ? <EmptyState title="还没有回复" text="你可以留下第一条回应。" /> : null}
-        <CommentList comments={detail.comments} onReply={openCommentReply} />
+        <CommentList comments={sortedComments} onReply={openCommentReply} />
       </section>
     </section>
   );
