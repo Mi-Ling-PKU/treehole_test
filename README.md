@@ -1,92 +1,126 @@
-# 树洞
+# Free Treehole
 
-一个使用 Next.js + Supabase + Cloudflare Workers 的匿名树洞网站。
+Free Treehole is an anonymous community board inspired by the spirit of campus treehole forums. Users can publish posts, reply anonymously, follow discussions, receive reply notifications, and search across public conversations.
 
-## 当前功能
+The project is maintained by Mi-Ling-PKU and Codex.
 
-- 账号注册、登录、退出，公开页面不显示邮箱。
-- 登录后浏览广场、发布树洞、回复树洞、回复指定评论。
-- 发布树洞后，发布者会自动关注自己的树洞。
-- 每条树洞内独立分配匿名名称：洞主显示为“洞主”，其他参与者按首次回复顺序显示 Alice、Bob、Carol 等；超过 26 人后使用 Angry Alice、Angry Bob 等旧树洞风格名称。
-- 关注列表、站内消息、回复提醒、全文搜索。
-- 举报内容、管理员审核、折叠、恢复、删除、临时限制账号。
-- 黑夜/白天模式切换，默认黑夜模式。
+## Features
 
-## 本地运行
+- Email/password authentication with Supabase Auth.
+- Logged-in community feed for browsing, publishing, replying, and following posts.
+- Per-post anonymous identities: the post author is shown as `洞主`; other participants receive stable names such as Alice, Bob, Carol, and later prefixed names.
+- Dedicated post pages at `/post/[id]`, supporting both UUIDs and public post numbers such as `/post/1`.
+- Followed-post view with the same browsing experience as the main feed.
+- Reply notifications with post number and a short reply preview.
+- Message read/unread controls.
+- Search settings for searching only posts or both posts and replies.
+- Report and moderation workflow for admins.
+- Dark/light theme toggle, with dark mode as the default.
+- Client-side drafts for new posts and replies.
 
-1. 安装依赖：
+## Tech Stack
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Supabase Auth and Postgres
+- Vercel
+
+## Local Setup
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. 创建 Supabase 项目。
-3. 打开 Supabase SQL Editor，执行 `supabase/schema.sql` 中的全部 SQL。
+Create a Supabase project, then run the full SQL in:
 
-注意：这个 SQL 会删除并重建本项目的业务表，适合当前重构后的数据结构。
-
-4. 复制 `.env.example` 为 `.env.local`，填入 Supabase 项目的 URL 和 Anon Key。
-5. 启动开发服务器：
-
-```bash
-npm run dev
+```text
+supabase/schema.sql
 ```
 
-访问 `http://localhost:3000`。
+This schema creates the application tables, row-level security policies, and RPC functions used by the app. It is intended for a fresh project or a controlled reset, because it drops and recreates the app's business tables.
 
-## 设置登录
-
-在 Supabase 控制台打开 Authentication > Providers，启用 Email。当前前端注册成功后显示“注册成功！”。如果你重新打开邮箱验证，Supabase 会要求用户先完成邮件验证再登录。
-
-## 设置管理员
-
-1. 先在网站注册一个账号。
-2. 到 Supabase 控制台 Authentication > Users，复制这个用户的 ID。
-3. 到 SQL Editor 执行：
-
-```sql
-insert into public.admins (user_id)
-values ('替换成你的用户ID');
-```
-
-之后这个账号可以看到导航里的“审核”入口，并访问 `/admin`。
-
-## 部署到 Cloudflare Workers
-
-1. 确认 Supabase 已执行最新 `supabase/schema.sql`。
-2. 本地登录 Wrangler：
-
-```bash
-npx wrangler login
-```
-
-3. 部署：
-
-```bash
-npm run deploy
-```
-
-4. 在 Cloudflare 的 Variables and secrets 中添加：
+Copy `.env.example` to `.env.local` and fill in:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
 ```
 
-5. 部署后，在 Supabase Authentication > URL Configuration 中把 Cloudflare 网址加入 Site URL 和 Redirect URLs，例如：
-
-```text
-https://你的项目名.你的账号.workers.dev
-https://你的项目名.你的账号.workers.dev/**
-```
-
-## 常用命令
+Start the development server:
 
 ```bash
-npm run lint
-npm run build
-npm run preview
-npm run deploy
+npm run dev
 ```
 
-`preview` 会用 Cloudflare Workers 运行时本地预览，`deploy` 会构建并发布到 Cloudflare。
+Open:
+
+```text
+http://localhost:3000
+```
+
+## Supabase Auth
+
+In Supabase, enable Email under Authentication > Providers.
+
+After deployment, add the production site to Authentication > URL Configuration:
+
+```text
+https://your-domain.vercel.app
+https://your-domain.vercel.app/**
+```
+
+## Admin Setup
+
+Register a user account first. Then copy that user's ID from Supabase Authentication > Users and run:
+
+```sql
+insert into public.admins (user_id)
+values ('replace-with-user-id');
+```
+
+That account will see the admin entry and can review reports.
+
+## Incremental SQL Updates
+
+For existing deployments, small non-destructive database updates may be placed in `supabase/update_*.sql`.
+
+For example:
+
+```text
+supabase/update_comment_notifications.sql
+```
+
+Run these files in Supabase SQL Editor when the deployed frontend depends on updated RPC behavior.
+
+## Vercel Deployment
+
+Import the GitHub repository into Vercel and use the default Next.js settings.
+
+Required environment variables:
+
+```text
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+```
+
+Recommended build command:
+
+```bash
+npm run build
+```
+
+## Common Commands
+
+```bash
+npm run dev
+npm run lint
+npm run build
+```
+
+## Credits
+
+Free Treehole is inspired by PKU Treehole culture. The implementation also acknowledges ideas and prior art from the open-source projects `xmcp/webhole` and `jimmielin/the-light`.
