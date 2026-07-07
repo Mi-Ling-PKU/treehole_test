@@ -39,11 +39,11 @@ export function HeaderNav() {
 
   const linkClass = (active: boolean) =>
     `relative inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
-      active ? "bg-moss font-semibold text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
+      active ? "bg-moss font-semibold text-white" : "text-ink/70 hover:bg-mist hover:text-ink dark:text-white/75 dark:hover:bg-white/10 dark:hover:text-white"
     }`;
   const iconLinkClass = (active: boolean) =>
     `relative inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
-      active ? "bg-moss font-semibold text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
+      active ? "bg-moss font-semibold text-white" : "text-ink/70 hover:bg-mist hover:text-ink dark:text-white/75 dark:hover:bg-white/10 dark:hover:text-white"
     }`;
 
   return (
@@ -60,7 +60,7 @@ export function HeaderNav() {
         <Bell size={15} aria-hidden="true" />
         消息
         {hasUnread ? (
-          <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-[#22272e]" aria-label="有新消息" />
+          <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-paper dark:ring-[#22272e]" aria-label="有新消息" />
         ) : null}
       </Link>
       {showAdmin ? (

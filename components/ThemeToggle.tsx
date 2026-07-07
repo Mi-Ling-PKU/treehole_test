@@ -25,7 +25,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/15 text-white/80 hover:bg-white/10 hover:text-white"
+      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-ink/10 text-ink/70 hover:bg-mist hover:text-ink dark:border-white/15 dark:text-white/80 dark:hover:bg-white/10 dark:hover:text-white"
       aria-label={theme === "dark" ? "切换到白天模式" : "切换到黑夜模式"}
       title={theme === "dark" ? "白天模式" : "黑夜模式"}
     >
