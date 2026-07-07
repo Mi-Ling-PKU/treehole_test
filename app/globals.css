@@ -37,7 +37,8 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    linear-gradient(180deg, rgb(var(--background-start) / 0.95), rgb(var(--background-end) / 0.96) 36%),
+    linear-gradient(180deg, rgb(var(--background-start) / 0.42), rgb(var(--background-end) / 0.62) 42%),
+    url("/background.jpg") center / cover fixed,
     rgb(var(--color-paper));
   color: rgb(var(--color-ink));
 }
