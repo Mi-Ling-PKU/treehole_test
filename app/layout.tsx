@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { HeaderNav } from "@/components/HeaderNav";
-import { HeaderUser } from "@/components/HeaderUser";
+import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,17 +18,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
         <div className="min-h-screen">
-          <header className="border-b border-ink/10 bg-paper/85 backdrop-blur">
-            <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
-              <div className="flex flex-wrap items-center justify-start gap-3">
-                <Link href="/" className="-ml-2 rounded-md px-2 py-1 text-lg font-semibold text-ink hover:bg-mist">
-                  树洞
-                </Link>
-                <HeaderNav />
-              </div>
-              <HeaderUser />
-            </div>
-          </header>
+          <SiteHeader />
           {children}
         </div>
       </body>

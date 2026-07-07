@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { Bell, Shield, Star } from "lucide-react";
 import { isCurrentUserAdmin } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function HeaderNav() {
   const pathname = usePathname();
@@ -55,7 +54,6 @@ export function HeaderNav() {
           审核
         </Link>
       ) : null}
-      <ThemeToggle />
     </nav>
   );
 }
