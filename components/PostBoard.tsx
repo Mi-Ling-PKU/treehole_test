@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Plus, Search, Settings2 } from "lucide-react";
+import { ArrowLeft, Plus, RotateCcw, Search, Settings2 } from "lucide-react";
 import { ComposerDrawer } from "@/components/ComposerDrawer";
 import { EmptyState } from "@/components/EmptyState";
 import { PostCard } from "@/components/PostCard";
@@ -185,6 +185,16 @@ export function PostBoard({
               </div>
             ) : null}
           </div>
+          <button
+            type="button"
+            onClick={loadPosts}
+            disabled={loading}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-ink/10 bg-panel text-ink/70 hover:bg-mist hover:text-ink disabled:opacity-50"
+            aria-label="刷新"
+            title="刷新"
+          >
+            <RotateCcw size={16} aria-hidden="true" />
+          </button>
         </form>
         {activeQuery ? (
           <button type="button" onClick={clearSearch} className="rounded-md px-2 py-1 text-xs font-medium text-white/75 hover:bg-white/10 hover:text-white">

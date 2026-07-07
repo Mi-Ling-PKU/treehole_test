@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Check, Mail, MailOpen } from "lucide-react";
+import { ArrowLeft, Check, Mail, MailOpen, RotateCcw } from "lucide-react";
 import { AuthGate } from "@/components/AuthGate";
 import { EmptyState } from "@/components/EmptyState";
 import { listMessages, markAllMessagesRead, markMessageRead, markMessageUnread } from "@/lib/data";
@@ -37,21 +37,6 @@ export default function MessagesPage() {
 
   useEffect(() => {
     loadMessages();
-
-    const intervalId = window.setInterval(loadMessages, 15000);
-
-    function refreshWhenVisible() {
-      if (document.visibilityState === "visible") {
-        loadMessages();
-      }
-    }
-
-    document.addEventListener("visibilitychange", refreshWhenVisible);
-
-    return () => {
-      window.clearInterval(intervalId);
-      document.removeEventListener("visibilitychange", refreshWhenVisible);
-    };
   }, []);
 
   async function markRead(messageId: string) {
@@ -109,13 +94,24 @@ export default function MessagesPage() {
             <h1 className="text-2xl font-semibold text-white">消息</h1>
             <p className="mt-2 text-sm text-white/75">回复提醒和站点通知会出现在这里。</p>
           </div>
-          <button
-            type="button"
-            onClick={markAllRead}
-            className="rounded-md border border-ink/10 bg-panel px-3 py-2 text-sm font-semibold text-ink/70 hover:bg-mist hover:text-ink"
-          >
-            全部已读
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={markAllRead}
+              className="rounded-md border border-ink/10 bg-panel px-3 py-2 text-sm font-semibold text-ink/70 hover:bg-mist hover:text-ink"
+            >
+              全部已读
+            </button>
+            <button
+              type="button"
+              onClick={loadMessages}
+              disabled={loading}
+              className="inline-flex items-center gap-2 rounded-md border border-ink/10 bg-panel px-3 py-2 text-sm font-semibold text-ink/70 hover:bg-mist hover:text-ink disabled:opacity-50"
+            >
+              <RotateCcw size={16} aria-hidden="true" />
+              刷新
+            </button>
+          </div>
         </div>
 
         {error ? <p className="mb-4 rounded-md bg-clay/10 p-3 text-sm text-clay">{error}</p> : null}
