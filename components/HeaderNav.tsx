@@ -27,10 +27,12 @@ export function HeaderNav() {
     }
 
     refresh();
+    window.addEventListener("treehole:messages-changed", refresh);
     const { data } = supabase.auth.onAuthStateChange(refresh);
 
     return () => {
       active = false;
+      window.removeEventListener("treehole:messages-changed", refresh);
       data.subscription.unsubscribe();
     };
   }, []);

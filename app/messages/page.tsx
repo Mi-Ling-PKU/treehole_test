@@ -39,10 +39,15 @@ export default function MessagesPage() {
     loadMessages();
   }, []);
 
+  function notifyMessagesChanged() {
+    window.dispatchEvent(new Event("treehole:messages-changed"));
+  }
+
   async function markRead(messageId: string) {
     try {
       await markMessageRead(messageId);
       await loadMessages();
+      notifyMessagesChanged();
     } catch (markError) {
       setError(markError instanceof Error ? markError.message : "暂时无法标记已读。");
     }
@@ -52,6 +57,7 @@ export default function MessagesPage() {
     try {
       await markMessageUnread(messageId);
       await loadMessages();
+      notifyMessagesChanged();
     } catch (markError) {
       setError(markError instanceof Error ? markError.message : "暂时无法设为未读。");
     }
@@ -61,6 +67,7 @@ export default function MessagesPage() {
     try {
       await markAllMessagesRead();
       await loadMessages();
+      notifyMessagesChanged();
     } catch (markError) {
       setError(markError instanceof Error ? markError.message : "暂时无法全部标记已读。");
     }
@@ -74,6 +81,7 @@ export default function MessagesPage() {
     try {
       if (!message.read_at) {
         await markMessageRead(message.id);
+        notifyMessagesChanged();
       }
       router.push(`/post/${message.post_id}`);
     } catch (openError) {

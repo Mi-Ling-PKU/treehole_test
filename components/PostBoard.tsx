@@ -215,7 +215,7 @@ export function PostBoard({
               post={post}
               selected={post.id === selectedId}
               onSelect={() => openPost(post.id)}
-              onReplySelect={() => openPost(post.id, true)}
+              onReplySelect={() => openPost(post.id)}
               onFavoriteChanged={loadPosts}
               onDeleted={loadPosts}
             />
