@@ -32,15 +32,15 @@ export function HeaderNav() {
 
   const linkClass = (active: boolean) =>
     `inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
-      active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"
+      active ? "bg-moss font-semibold text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
     }`;
   const iconLinkClass = (active: boolean) =>
     `inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
-      active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"
+      active ? "bg-moss font-semibold text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
     }`;
 
   return (
-    <nav className="flex w-full items-center justify-center gap-2 text-sm font-medium text-ink/70">
+    <nav className="flex w-full items-center justify-center gap-2 text-sm font-medium">
       <Link className={linkClass(pathname === "/" || pathname.startsWith("/post/"))} href="/">
         <LayoutGrid size={15} aria-hidden="true" />
         广场

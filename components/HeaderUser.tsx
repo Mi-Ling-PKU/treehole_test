@@ -29,13 +29,13 @@ export function HeaderUser() {
   }
 
   return (
-    <div className="flex min-w-0 items-center gap-2 text-sm text-ink/70">
-      <UserRound size={16} aria-hidden="true" />
-      <span className="max-w-40 truncate">{user.email}</span>
+    <div className="flex min-w-0 items-center gap-2 text-sm text-white/80">
+      <UserRound className="hidden shrink-0 sm:block" size={16} aria-hidden="true" />
+      <span className="max-w-[6.5rem] truncate sm:max-w-40">{user.email}</span>
       <button
         type="button"
         onClick={signOut}
-        className="inline-flex items-center gap-1 rounded-md border border-ink/10 px-2 py-1.5 font-medium hover:bg-mist hover:text-ink"
+        className="inline-flex shrink-0 items-center gap-1 rounded-md border border-white/15 px-2 py-1.5 font-medium hover:bg-white/10 hover:text-white"
       >
         <LogOut size={15} aria-hidden="true" />
         退出
