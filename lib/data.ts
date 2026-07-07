@@ -289,6 +289,13 @@ export async function markMessageRead(messageId: string) {
   }
 }
 
+export async function markMessageUnread(messageId: string) {
+  const { error } = await supabase.rpc("mark_message_unread", { p_message_id: messageId });
+  if (error) {
+    throw new Error(getFriendlyDataMessage(error));
+  }
+}
+
 export async function listAdminReports(): Promise<AdminReportRow[]> {
   assertSupabaseConfigured();
   const { data, error } = await supabase

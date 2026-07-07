@@ -7,6 +7,7 @@ drop function if exists public.create_report(text, uuid, text) cascade;
 drop function if exists public.review_report(uuid, text) cascade;
 drop function if exists public.moderate_content(text, uuid, text, text, boolean, timestamptz) cascade;
 drop function if exists public.mark_message_read(uuid) cascade;
+drop function if exists public.mark_message_unread(uuid) cascade;
 drop function if exists public.is_admin() cascade;
 drop function if exists public.touch_updated_at() cascade;
 drop function if exists public.next_participant_name(integer) cascade;
@@ -253,7 +254,9 @@ declare
   comment_sequence integer;
   participant_sequence integer;
   post_author uuid;
+  post_public_no bigint;
   parent_author uuid;
+  reply_summary text;
 begin
   if auth.uid() is null then
     raise exception 'AUTH_REQUIRED';
@@ -262,7 +265,7 @@ begin
   perform public.assert_not_banned();
   perform pg_advisory_xact_lock(hashtext(p_post_id::text));
 
-  select author_id into post_author
+  select author_id, public_no into post_author, post_public_no
   from public.posts
   where id = p_post_id and status <> 'deleted';
 
@@ -310,14 +313,30 @@ begin
   set favorite_count = (select count(*) from public.favorites where post_id = p_post_id)
   where id = p_post_id;
 
+  reply_summary := left(trim(p_content), 10) || case when char_length(trim(p_content)) > 10 then '...' else '' end;
+
   if post_author <> auth.uid() then
     insert into public.messages(user_id, kind, title, content, post_id, comment_id)
-    values (post_author, 'reply', '你的树洞有新回复', '有人回复了你的树洞。', p_post_id, new_comment_id);
+    values (
+      post_author,
+      'reply',
+      '你的树洞有新回复',
+      '有人回复了你的树洞 #' || post_public_no::text || '：' || reply_summary,
+      p_post_id,
+      new_comment_id
+    );
   end if;
 
   if parent_author is not null and parent_author <> auth.uid() and parent_author <> post_author then
     insert into public.messages(user_id, kind, title, content, post_id, comment_id)
-    values (parent_author, 'reply', '你的回复有新回应', '有人回应了你的回复。', p_post_id, new_comment_id);
+    values (
+      parent_author,
+      'reply',
+      '你的回复有新回应',
+      '有人回复了你在树洞 #' || post_public_no::text || ' 中的回复：' || reply_summary,
+      p_post_id,
+      new_comment_id
+    );
   end if;
 
   return new_comment_id;
@@ -492,6 +511,23 @@ begin
 
   update public.messages
   set read_at = coalesce(read_at, now())
+  where id = p_message_id and user_id = auth.uid();
+end;
+$$;
+
+create or replace function public.mark_message_unread(p_message_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if auth.uid() is null then
+    raise exception 'AUTH_REQUIRED';
+  end if;
+
+  update public.messages
+  set read_at = null
   where id = p_message_id and user_id = auth.uid();
 end;
 $$;

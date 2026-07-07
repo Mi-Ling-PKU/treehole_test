@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Check, MailOpen } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Check, Mail, MailOpen } from "lucide-react";
 import { AuthGate } from "@/components/AuthGate";
 import { EmptyState } from "@/components/EmptyState";
-import { listMessages, markMessageRead } from "@/lib/data";
+import { listMessages, markMessageRead, markMessageUnread } from "@/lib/data";
 import type { Message } from "@/lib/types";
 
 const formatter = new Intl.DateTimeFormat("zh-CN", {
@@ -16,6 +17,7 @@ const formatter = new Intl.DateTimeFormat("zh-CN", {
 });
 
 export default function MessagesPage() {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +63,30 @@ export default function MessagesPage() {
     }
   }
 
+  async function markUnread(messageId: string) {
+    try {
+      await markMessageUnread(messageId);
+      await loadMessages();
+    } catch (markError) {
+      setError(markError instanceof Error ? markError.message : "暂时无法设为未读。");
+    }
+  }
+
+  async function openMessage(message: Message) {
+    if (!message.post_id) {
+      return;
+    }
+
+    try {
+      if (!message.read_at) {
+        await markMessageRead(message.id);
+      }
+      router.push(`/post/${message.post_id}`);
+    } catch (openError) {
+      setError(openError instanceof Error ? openError.message : "暂时无法打开这条树洞。");
+    }
+  }
+
   return (
     <AuthGate barMaxWidthClassName="max-w-3xl">
       <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
@@ -92,9 +118,13 @@ export default function MessagesPage() {
               <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink/70">{message.content}</p>
               <div className="mt-3 flex flex-wrap gap-2 border-t border-ink/10 pt-3">
                 {message.post_id ? (
-                  <Link href={`/post/${message.post_id}`} className="rounded-md bg-moss px-3 py-2 text-xs font-semibold text-white hover:bg-moss/90">
+                  <button
+                    type="button"
+                    onClick={() => openMessage(message)}
+                    className="rounded-md bg-moss px-3 py-2 text-xs font-semibold text-white hover:bg-moss/90"
+                  >
                     查看树洞
-                  </Link>
+                  </button>
                 ) : null}
                 {!message.read_at ? (
                   <button
@@ -105,7 +135,16 @@ export default function MessagesPage() {
                     <Check size={14} aria-hidden="true" />
                     标记已读
                   </button>
-                ) : null}
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => markUnread(message.id)}
+                    className="inline-flex items-center gap-1 rounded-md border border-ink/10 px-3 py-2 text-xs font-semibold text-ink/70 hover:bg-mist"
+                  >
+                    <Mail size={14} aria-hidden="true" />
+                    设为未读
+                  </button>
+                )}
               </div>
             </article>
           ))}
