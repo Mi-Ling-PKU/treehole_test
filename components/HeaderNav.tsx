@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bell, Shield, Star } from "lucide-react";
+import { Bell, LayoutGrid, Shield, Star } from "lucide-react";
 import { isCurrentUserAdmin } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 
@@ -31,13 +31,18 @@ export function HeaderNav() {
   }, []);
 
   const linkClass = (active: boolean) =>
-    `rounded-md px-3 py-2 ${active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"}`;
+    `inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
+      active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"
+    }`;
   const iconLinkClass = (active: boolean) =>
-    `inline-flex items-center gap-1 rounded-md px-3 py-2 ${active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"}`;
+    `inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
+      active ? "bg-moss font-semibold text-white" : "hover:bg-mist hover:text-ink"
+    }`;
 
   return (
-    <nav className="flex flex-wrap items-center justify-start gap-1 text-sm font-medium text-ink/70">
+    <nav className="flex w-full items-center justify-center gap-2 text-sm font-medium text-ink/70">
       <Link className={linkClass(pathname === "/" || pathname.startsWith("/post/"))} href="/">
+        <LayoutGrid size={15} aria-hidden="true" />
         广场
       </Link>
       <Link className={iconLinkClass(pathname === "/favorites")} href="/favorites">

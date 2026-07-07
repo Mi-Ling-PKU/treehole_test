@@ -10,17 +10,32 @@ export function SiteHeader() {
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
+    let frame = 0;
+
     function updateCollapsed() {
-      setCollapsed(window.scrollY > 16);
+      if (frame) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setCollapsed((current) => (current ? y > 24 : y > 88));
+        frame = 0;
+      });
     }
 
     updateCollapsed();
     window.addEventListener("scroll", updateCollapsed, { passive: true });
-    return () => window.removeEventListener("scroll", updateCollapsed);
+    return () => {
+      window.removeEventListener("scroll", updateCollapsed);
+      if (frame) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/92 backdrop-blur">
       <div
         className={`overflow-hidden transition-[max-height,opacity] duration-200 ease-out ${
           collapsed ? "max-h-0 opacity-0" : "max-h-24 opacity-100"
@@ -36,8 +51,10 @@ export function SiteHeader() {
           </div>
         </div>
       </div>
-      <div className="mx-auto flex max-w-3xl items-center px-4 py-2 sm:px-6">
-        <HeaderNav />
+      <div className="border-t border-ink/10">
+        <div className="mx-auto flex max-w-3xl items-center px-4 py-2 sm:px-6">
+          <HeaderNav />
+        </div>
       </div>
     </header>
   );
