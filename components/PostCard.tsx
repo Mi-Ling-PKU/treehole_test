@@ -3,6 +3,7 @@
 import { Clock, MessageSquare } from "lucide-react";
 import { DeleteButton } from "@/components/DeleteButton";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { ReferenceText } from "@/components/ReferenceText";
 import { ReportButton } from "@/components/ReportButton";
 import type { PostSummary } from "@/lib/types";
 
@@ -30,7 +31,18 @@ export function PostCard({
 }) {
   return (
     <article className={`rounded-md border bg-panel/90 p-4 shadow-soft ${selected ? "border-moss/55" : "border-ink/10"}`}>
-      <button type="button" onClick={onSelect} className="block w-full text-left">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={onSelect}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            onSelect();
+          }
+        }}
+        className="block w-full cursor-pointer text-left"
+      >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm font-semibold text-moss">#{post.public_no}</span>
           <span className="inline-flex items-center gap-1 text-xs text-ink/45">
@@ -38,8 +50,13 @@ export function PostCard({
             {formatter.format(new Date(post.created_at))}
           </span>
         </div>
-        <p className="mt-3 line-clamp-5 whitespace-pre-wrap text-base leading-7 text-ink">{post.content}</p>
-      </button>
+        <ReferenceText
+          content={post.content}
+          currentPublicNo={post.public_no}
+          className="mt-3 line-clamp-5 whitespace-pre-wrap text-base leading-7 text-ink"
+          stopPropagation
+        />
+      </div>
       <div className="mt-4 flex flex-wrap items-start justify-between gap-3 border-t border-ink/10 pt-3">
         <div className="flex flex-wrap items-center gap-2">
           <button

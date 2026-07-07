@@ -8,6 +8,7 @@ import { ComposerDrawer } from "@/components/ComposerDrawer";
 import { DeleteButton } from "@/components/DeleteButton";
 import { EmptyState } from "@/components/EmptyState";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { ReferenceText } from "@/components/ReferenceText";
 import { ReportButton } from "@/components/ReportButton";
 import { getPostDetail } from "@/lib/data";
 import type { CommentView, PostDetail } from "@/lib/types";
@@ -95,7 +96,11 @@ export function PostDetailPanel({
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">{replyingTo.author_name}</span>
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">#{replyingTo.sequence}</span>
       </div>
-      <p className="whitespace-pre-wrap text-base leading-7 text-ink">{replyingTo.content}</p>
+      <ReferenceText
+        content={replyingTo.content}
+        currentPublicNo={detail?.post.public_no ?? 0}
+        className="whitespace-pre-wrap text-base leading-7 text-ink"
+      />
     </article>
   ) : detail ? (
     <article className="rounded-md border border-ink/10 bg-paper p-4">
@@ -103,7 +108,11 @@ export function PostDetailPanel({
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">洞主</span>
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">#{detail.post.public_no}</span>
       </div>
-      <p className="whitespace-pre-wrap text-base leading-7 text-ink">{detail.post.content}</p>
+      <ReferenceText
+        content={detail.post.content}
+        currentPublicNo={detail.post.public_no}
+        className="whitespace-pre-wrap text-base leading-7 text-ink"
+      />
     </article>
   ) : null;
 
@@ -152,9 +161,25 @@ export function PostDetailPanel({
             ) : null}
           </div>
         </div>
-        <button type="button" onClick={openPostReply} className="mt-4 block w-full text-left">
-          <p className="whitespace-pre-wrap text-base leading-7 text-ink">{detail.post.content}</p>
-        </button>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={openPostReply}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openPostReply();
+            }
+          }}
+          className="mt-4 block w-full cursor-pointer text-left"
+        >
+          <ReferenceText
+            content={detail.post.content}
+            currentPublicNo={detail.post.public_no}
+            className="whitespace-pre-wrap text-base leading-7 text-ink"
+            stopPropagation
+          />
+        </div>
         <div className="mt-4 flex flex-wrap items-start justify-between gap-3 border-t border-ink/10 pt-3">
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -221,7 +246,12 @@ export function PostDetailPanel({
           </button>
         </div>
         {detail.comments.length === 0 ? <EmptyState title="还没有回复" text="你可以留下第一条回应。" /> : null}
-        <CommentList comments={sortedComments} onReply={openCommentReply} onDeleted={refreshAll} />
+        <CommentList
+          comments={sortedComments}
+          currentPublicNo={detail.post.public_no}
+          onReply={openCommentReply}
+          onDeleted={refreshAll}
+        />
       </section>
     </section>
   );
