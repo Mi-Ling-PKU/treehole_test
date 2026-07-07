@@ -5,7 +5,7 @@ import { PostBoard } from "@/components/PostBoard";
 
 export default function FavoritesPage() {
   return (
-    <AuthGate barMaxWidthClassName="max-w-3xl">
+    <AuthGate>
       <PostBoard mode="favorites" title="关注" layout="centered" />
     </AuthGate>
   );

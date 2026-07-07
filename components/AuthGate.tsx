@@ -3,20 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { LogOut, UserRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
-export function AuthGate({
-  children,
-  barMaxWidthClassName = "max-w-6xl",
-  action,
-  showUserBar = true
-}: {
+export function AuthGate({ children }: {
   children: React.ReactNode;
   requireAuth?: boolean;
-  barMaxWidthClassName?: string;
-  action?: React.ReactNode;
-  showUserBar?: boolean;
 }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -34,10 +25,6 @@ export function AuthGate({
 
     return () => data.subscription.unsubscribe();
   }, []);
-
-  async function signOut() {
-    await supabase.auth.signOut();
-  }
 
   if (loading) {
     return <div className="rounded-md border border-ink/10 bg-panel/75 p-4 text-sm text-ink/60">正在连接社区...</div>;
@@ -62,27 +49,6 @@ export function AuthGate({
 
   return (
     <>
-      {showUserBar ? (
-        <div className={`mx-auto ${barMaxWidthClassName} px-4 pt-4 sm:px-6`}>
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-ink/10 bg-panel/80 px-4 py-3 text-sm shadow-soft">
-            <div className="flex min-w-0 items-center gap-2 text-ink/70">
-              <UserRound size={17} aria-hidden="true" />
-              <span className="truncate">{user.email}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              {action}
-              <button
-                type="button"
-                onClick={signOut}
-                className="inline-flex items-center gap-2 rounded-md border border-ink/10 px-3 py-2 font-medium text-ink/70 hover:bg-mist hover:text-ink"
-              >
-                <LogOut size={16} aria-hidden="true" />
-                退出
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
       {children}
     </>
   );

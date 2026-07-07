@@ -89,7 +89,7 @@ export function PostDetailPanel({
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">{replyingTo.author_name}</span>
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">#{replyingTo.sequence}</span>
       </div>
-      <p className="whitespace-pre-wrap text-sm leading-6 text-ink">{replyingTo.content}</p>
+      <p className="whitespace-pre-wrap text-base leading-7 text-ink">{replyingTo.content}</p>
     </article>
   ) : detail ? (
     <article className="rounded-md border border-ink/10 bg-paper p-4">
@@ -97,7 +97,7 @@ export function PostDetailPanel({
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">洞主</span>
         <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">#{detail.post.public_no}</span>
       </div>
-      <p className="whitespace-pre-wrap text-sm leading-6 text-ink">{detail.post.content}</p>
+      <p className="whitespace-pre-wrap text-base leading-7 text-ink">{detail.post.content}</p>
     </article>
   ) : null;
 
@@ -127,7 +127,7 @@ export function PostDetailPanel({
 
   return (
     <section className="space-y-5">
-      <article className="rounded-md border border-ink/10 bg-panel/90 p-5 shadow-soft">
+      <article className="rounded-md border border-ink/10 bg-panel/75 p-5 shadow-soft">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-md bg-mist px-2 py-1 text-xs font-semibold text-moss">洞主</span>
@@ -147,7 +147,7 @@ export function PostDetailPanel({
           </div>
         </div>
         <button type="button" onClick={openPostReply} className="mt-4 block w-full text-left">
-          <p className="whitespace-pre-wrap text-sm leading-7 text-ink">{detail.post.content}</p>
+          <p className="whitespace-pre-wrap text-base leading-7 text-ink">{detail.post.content}</p>
         </button>
         <div className="mt-4 flex flex-wrap items-start justify-between gap-3 border-t border-ink/10 pt-3">
           <div className="flex flex-wrap items-center gap-2">

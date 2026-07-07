@@ -26,7 +26,7 @@ export function PostCard({
   onFavoriteChanged?: () => void;
 }) {
   return (
-    <article className={`rounded-md border bg-panel/85 p-4 shadow-soft ${selected ? "border-moss/55" : "border-ink/10"}`}>
+    <article className={`rounded-md border bg-panel/75 p-4 shadow-soft ${selected ? "border-moss/55" : "border-ink/10"}`}>
       <button type="button" onClick={onSelect} className="block w-full text-left">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-sm font-semibold text-moss">#{post.public_no}</span>
@@ -35,7 +35,7 @@ export function PostCard({
             {formatter.format(new Date(post.created_at))}
           </span>
         </div>
-        <p className="mt-3 line-clamp-5 whitespace-pre-wrap text-sm leading-6 text-ink">{post.content}</p>
+        <p className="mt-3 line-clamp-5 whitespace-pre-wrap text-base leading-7 text-ink">{post.content}</p>
       </button>
       <div className="mt-4 flex flex-wrap items-start justify-between gap-3 border-t border-ink/10 pt-3">
         <div className="flex flex-wrap items-center gap-2">

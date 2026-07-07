@@ -97,7 +97,7 @@ export default function MessagesPage() {
   }
 
   return (
-    <AuthGate barMaxWidthClassName="max-w-3xl">
+    <AuthGate>
       <main className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
         <Link href="/" className="mb-4 inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium text-ink/60 hover:bg-mist hover:text-ink">
           <ArrowLeft size={16} aria-hidden="true" />

@@ -40,7 +40,6 @@ export function PostBoard({
   const [error, setError] = useState<string | null>(null);
   const composerOpen = controlledComposerOpen ?? internalComposerOpen;
   const setComposerOpen = onComposerOpenChange ?? setInternalComposerOpen;
-  const showInlineComposerButton = showComposer && !onComposerOpenChange;
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
@@ -110,23 +109,12 @@ export function PostBoard({
   return (
     <main className={layout === "centered" ? "mx-auto max-w-3xl px-4 py-4 sm:px-6" : "mx-auto grid max-w-6xl gap-5 px-4 py-4 sm:px-6 lg:grid-cols-[360px_1fr]"}>
       <section className="space-y-4">
-        {title || description || showInlineComposerButton ? (
+        {title || description ? (
           <div className="flex items-start justify-between gap-3">
             <div>
               {title ? <h1 className="text-2xl font-semibold text-ink">{title}</h1> : null}
               {description ? <p className="mt-2 text-sm leading-6 text-ink/60">{description}</p> : null}
             </div>
-            {showInlineComposerButton ? (
-              <button
-                type="button"
-                onClick={() => setComposerOpen(true)}
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-moss text-white hover:bg-moss/90"
-                aria-label="发布树洞"
-                title="发布树洞"
-              >
-                <Plus size={22} aria-hidden="true" />
-              </button>
-            ) : null}
           </div>
         ) : null}
 
@@ -137,6 +125,17 @@ export function PostBoard({
         ) : null}
 
         <form onSubmit={submitSearch} className="flex flex-wrap items-center gap-2">
+          {showComposer ? (
+            <button
+              type="button"
+              onClick={() => setComposerOpen(true)}
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-moss text-white hover:bg-moss/90"
+              aria-label="发布树洞"
+              title="发布树洞"
+            >
+              <Plus size={22} aria-hidden="true" />
+            </button>
+          ) : null}
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
