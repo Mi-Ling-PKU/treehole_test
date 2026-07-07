@@ -280,9 +280,11 @@ export async function deleteOwnContent(targetType: ReportTargetType, targetId: s
 
 export async function listMessages(): Promise<Message[]> {
   assertSupabaseConfigured();
+  const user = await requireCurrentUser();
   const { data, error } = await supabase
     .from("messages")
     .select("*")
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false })
     .limit(80);
 

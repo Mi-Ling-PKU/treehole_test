@@ -118,7 +118,6 @@ export default function MessagesPage() {
           </button>
         </div>
 
-        {loading ? <p className="text-sm text-white/75">正在加载...</p> : null}
         {error ? <p className="mb-4 rounded-md bg-clay/10 p-3 text-sm text-clay">{error}</p> : null}
         {!loading && !error && messages.length === 0 ? <EmptyState title="还没有消息" text="有新的回复或通知时会显示在这里。" /> : null}
 
