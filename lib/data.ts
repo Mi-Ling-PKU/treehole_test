@@ -295,6 +295,23 @@ export async function listMessages(): Promise<Message[]> {
   return (data ?? []) as Message[];
 }
 
+export async function hasUnreadMessages() {
+  assertSupabaseConfigured();
+  const user = await requireCurrentUser();
+  const { data, error } = await supabase
+    .from("messages")
+    .select("id")
+    .eq("user_id", user.id)
+    .is("read_at", null)
+    .limit(1);
+
+  if (error) {
+    throw new Error(getFriendlyDataMessage(error));
+  }
+
+  return Boolean(data?.length);
+}
+
 export async function markMessageRead(messageId: string) {
   const { error } = await supabase.rpc("mark_message_read", { p_message_id: messageId });
   if (error) {

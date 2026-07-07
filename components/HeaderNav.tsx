@@ -4,20 +4,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Bell, LayoutGrid, Shield, Star } from "lucide-react";
-import { isCurrentUserAdmin } from "@/lib/data";
+import { hasUnreadMessages, isCurrentUserAdmin } from "@/lib/data";
 import { supabase } from "@/lib/supabase";
 
 export function HeaderNav() {
   const pathname = usePathname();
   const [showAdmin, setShowAdmin] = useState(false);
+  const [hasUnread, setHasUnread] = useState(false);
 
   useEffect(() => {
     let active = true;
 
     async function refresh() {
-      const allowed = await isCurrentUserAdmin().catch(() => false);
+      const [allowed, unread] = await Promise.all([
+        isCurrentUserAdmin().catch(() => false),
+        hasUnreadMessages().catch(() => false)
+      ]);
       if (active) {
         setShowAdmin(allowed);
+        setHasUnread(unread);
       }
     }
 
@@ -31,11 +36,11 @@ export function HeaderNav() {
   }, []);
 
   const linkClass = (active: boolean) =>
-    `inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
+    `relative inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
       active ? "bg-moss font-semibold text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
     }`;
   const iconLinkClass = (active: boolean) =>
-    `inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
+    `relative inline-flex flex-1 basis-0 items-center justify-center gap-1 rounded-md px-3 py-2 text-center ${
       active ? "bg-moss font-semibold text-white" : "text-white/75 hover:bg-white/10 hover:text-white"
     }`;
 
@@ -52,6 +57,9 @@ export function HeaderNav() {
       <Link className={iconLinkClass(pathname === "/messages")} href="/messages">
         <Bell size={15} aria-hidden="true" />
         消息
+        {hasUnread ? (
+          <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-[#22272e]" aria-label="有新消息" />
+        ) : null}
       </Link>
       {showAdmin ? (
         <Link className={iconLinkClass(pathname === "/admin")} href="/admin">
