@@ -2,18 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { Check, ImageIcon, LogOut, Moon, RotateCcw, Settings, Sun, UserRound } from "lucide-react";
+import { Check, ImageIcon, LogOut, Moon, Plus, RotateCcw, Settings, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type Theme = "dark" | "light";
 type Accent = "green" | "blue" | "amber" | "rose" | "slate" | "custom";
 
-const accentOptions: Array<{ value: Exclude<Accent, "custom">; label: string; color: string }> = [
-  { value: "green", label: "绿色", color: "#5d7461" },
-  { value: "blue", label: "蓝色", color: "#4f6f91" },
-  { value: "amber", label: "琥珀", color: "#a76f2b" },
-  { value: "rose", label: "玫红", color: "#a95670" },
-  { value: "slate", label: "石墨", color: "#64707d" }
+const accentOptions: Array<{ value: Exclude<Accent, "custom">; label: string; light: string; dark: string }> = [
+  { value: "green", label: "绿色", light: "#5d7461", dark: "#8eb196" },
+  { value: "blue", label: "蓝色", light: "#4f6f91", dark: "#7da5d3" },
+  { value: "amber", label: "琥珀", light: "#a76f2b", dark: "#db9c4a" },
+  { value: "rose", label: "玫红", light: "#a95670", dark: "#db7e9a" },
+  { value: "slate", label: "石墨", light: "#64707d", dark: "#9da9b5" }
 ];
 
 export function HeaderSettings() {
@@ -192,14 +192,14 @@ export function HeaderSettings() {
                   title={option.label}
                   aria-label={option.label}
                 >
-                  <span className="grid h-7 w-7 place-items-center rounded-full" style={{ backgroundColor: option.color }}>
+                  <span className="grid h-7 w-7 place-items-center rounded-full" style={{ backgroundColor: theme === "dark" ? option.dark : option.light }}>
                     {accent === option.value ? <Check size={15} className="text-white" aria-hidden="true" /> : null}
                   </span>
                 </button>
               ))}
               <label className="group flex cursor-pointer flex-col items-center gap-1 rounded-md p-1 hover:bg-mist" title="自定义颜色">
                 <span className="grid h-7 w-7 place-items-center rounded-full border border-ink/15" style={{ backgroundColor: customColor }}>
-                  {accent === "custom" ? <Check size={15} className="text-white" aria-hidden="true" /> : null}
+                  {accent === "custom" ? <Check size={15} className="text-white" aria-hidden="true" /> : <Plus size={15} className="text-white" aria-hidden="true" />}
                 </span>
                 <input
                   type="color"
