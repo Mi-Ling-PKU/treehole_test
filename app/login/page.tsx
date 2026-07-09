@@ -54,20 +54,23 @@ export default function LoginPage() {
         <div className="mb-6">
           <h1 className="text-xl font-semibold text-ink">{mode === "login" ? "登录" : "注册"}</h1>
           <p className="mt-2 text-sm leading-6 text-ink/60">账号只用于保存你的参与状态，公开页面不会显示邮箱。</p>
+          <p className="mt-2 rounded-md border border-clay/20 bg-clay/10 px-3 py-2 text-sm leading-6 text-clay">
+            这是一个测试项目，请不要使用真实密码；你也可以不使用真实邮箱。
+          </p>
         </div>
 
-        <div className="mb-5 grid grid-cols-2 rounded-md bg-mist p-1">
+        <div className="mb-5 grid grid-cols-2 rounded-md bg-ink/8 p-1 dark:bg-white/8">
           <button
             type="button"
             onClick={() => setMode("login")}
-            className={`rounded-md px-3 py-2 text-sm font-semibold ${mode === "login" ? "bg-panel text-ink shadow-sm" : "text-ink/60"}`}
+            className={`rounded-md px-3 py-2 text-sm font-semibold ${mode === "login" ? "bg-panel text-ink shadow-sm" : "text-ink/60 hover:bg-panel/60"}`}
           >
             登录
           </button>
           <button
             type="button"
             onClick={() => setMode("signup")}
-            className={`rounded-md px-3 py-2 text-sm font-semibold ${mode === "signup" ? "bg-panel text-ink shadow-sm" : "text-ink/60"}`}
+            className={`rounded-md px-3 py-2 text-sm font-semibold ${mode === "signup" ? "bg-panel text-ink shadow-sm" : "text-ink/60 hover:bg-panel/60"}`}
           >
             注册
           </button>

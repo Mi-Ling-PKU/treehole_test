@@ -2,18 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { User } from "@supabase/supabase-js";
-import { Check, LogOut, Moon, Settings, Sun, UserRound } from "lucide-react";
+import { Check, ImageIcon, LogOut, Moon, RotateCcw, Settings, Sun, UserRound } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type Theme = "dark" | "light";
-type Accent = "green" | "blue" | "amber" | "rose" | "slate";
+type Accent = "green" | "blue" | "amber" | "rose" | "slate" | "custom";
 
-const accentOptions: Array<{ value: Accent; label: string; swatch: string }> = [
-  { value: "green", label: "绿色", swatch: "bg-[#5d7461]" },
-  { value: "blue", label: "蓝色", swatch: "bg-[#4f6f91]" },
-  { value: "amber", label: "琥珀", swatch: "bg-[#a76f2b]" },
-  { value: "rose", label: "玫红", swatch: "bg-[#a95670]" },
-  { value: "slate", label: "石墨", swatch: "bg-[#64707d]" }
+const accentOptions: Array<{ value: Exclude<Accent, "custom">; label: string; color: string }> = [
+  { value: "green", label: "绿色", color: "#5d7461" },
+  { value: "blue", label: "蓝色", color: "#4f6f91" },
+  { value: "amber", label: "琥珀", color: "#a76f2b" },
+  { value: "rose", label: "玫红", color: "#a95670" },
+  { value: "slate", label: "石墨", color: "#64707d" }
 ];
 
 export function HeaderSettings() {
@@ -21,15 +21,21 @@ export function HeaderSettings() {
   const [user, setUser] = useState<User | null>(null);
   const [theme, setTheme] = useState<Theme>("dark");
   const [accent, setAccent] = useState<Accent>("green");
+  const [customColor, setCustomColor] = useState("#5d7461");
+  const [hasCustomBackground, setHasCustomBackground] = useState(false);
+  const [backgroundStatus, setBackgroundStatus] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("theme") === "light" ? "light" : "dark";
     const savedAccent = readAccent(window.localStorage.getItem("accent"));
+    const savedCustomColor = readColor(window.localStorage.getItem("customAccent"));
     applyTheme(savedTheme);
-    applyAccent(savedAccent);
+    applyAccent(savedAccent, savedCustomColor);
     setTheme(savedTheme);
     setAccent(savedAccent);
+    setCustomColor(savedCustomColor);
+    setHasCustomBackground(Boolean(window.localStorage.getItem("backgroundImage")));
 
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
@@ -68,9 +74,55 @@ export function HeaderSettings() {
   }
 
   function chooseAccent(nextAccent: Accent) {
-    applyAccent(nextAccent);
+    applyAccent(nextAccent, customColor);
     setAccent(nextAccent);
     window.localStorage.setItem("accent", nextAccent);
+  }
+
+  function chooseCustomColor(nextColor: string) {
+    const color = readColor(nextColor);
+    setCustomColor(color);
+    setAccent("custom");
+    applyAccent("custom", color);
+    window.localStorage.setItem("accent", "custom");
+    window.localStorage.setItem("customAccent", color);
+  }
+
+  function chooseBackground(file: File | undefined) {
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setBackgroundStatus("请选择图片文件。");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== "string") {
+        setBackgroundStatus("暂时无法读取这张图片。");
+        return;
+      }
+
+      try {
+        window.localStorage.setItem("backgroundImage", reader.result);
+        applyBackground(reader.result);
+        setHasCustomBackground(true);
+        setBackgroundStatus("背景已更新。");
+      } catch {
+        setBackgroundStatus("图片太大，无法保存在浏览器中。");
+      }
+    };
+    reader.onerror = () => setBackgroundStatus("暂时无法读取这张图片。");
+    reader.readAsDataURL(file);
+  }
+
+  function resetBackground() {
+    window.localStorage.removeItem("backgroundImage");
+    document.documentElement.style.removeProperty("--background-image");
+    setHasCustomBackground(false);
+    setBackgroundStatus("已恢复默认背景。");
   }
 
   return (
@@ -129,8 +181,8 @@ export function HeaderSettings() {
               </button>
             </div>
 
-            <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-ink/45">高亮色</div>
-            <div className="mt-2 grid grid-cols-5 gap-2">
+            <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-ink/45">颜色</div>
+            <div className="mt-2 grid grid-cols-6 gap-2">
               {accentOptions.map((option) => (
                 <button
                   key={option.value}
@@ -140,13 +192,51 @@ export function HeaderSettings() {
                   title={option.label}
                   aria-label={option.label}
                 >
-                  <span className={`grid h-7 w-7 place-items-center rounded-full ${option.swatch}`}>
+                  <span className="grid h-7 w-7 place-items-center rounded-full" style={{ backgroundColor: option.color }}>
                     {accent === option.value ? <Check size={15} className="text-white" aria-hidden="true" /> : null}
                   </span>
-                  <span className="text-[11px] text-ink/55 group-hover:text-ink">{option.label}</span>
                 </button>
               ))}
+              <label className="group flex cursor-pointer flex-col items-center gap-1 rounded-md p-1 hover:bg-mist" title="自定义颜色">
+                <span className="grid h-7 w-7 place-items-center rounded-full border border-ink/15" style={{ backgroundColor: customColor }}>
+                  {accent === "custom" ? <Check size={15} className="text-white" aria-hidden="true" /> : null}
+                </span>
+                <input
+                  type="color"
+                  value={customColor}
+                  onChange={(event) => chooseCustomColor(event.target.value)}
+                  className="sr-only"
+                  aria-label="自定义颜色"
+                />
+              </label>
             </div>
+
+            <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-ink/45">背景</div>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-ink/10 px-3 py-2 font-medium text-ink/70 hover:bg-mist hover:text-ink">
+                <ImageIcon size={15} aria-hidden="true" />
+                选择图片
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={(event) => {
+                    chooseBackground(event.target.files?.[0]);
+                    event.target.value = "";
+                  }}
+                />
+              </label>
+              <button
+                type="button"
+                onClick={resetBackground}
+                disabled={!hasCustomBackground}
+                className="inline-flex items-center gap-2 rounded-md border border-ink/10 px-3 py-2 font-medium text-ink/70 hover:bg-mist hover:text-ink disabled:opacity-45"
+              >
+                <RotateCcw size={15} aria-hidden="true" />
+                恢复默认
+              </button>
+            </div>
+            {backgroundStatus ? <p className="mt-2 text-xs text-ink/55">{backgroundStatus}</p> : null}
           </section>
         </div>
       ) : null}
@@ -155,13 +245,31 @@ export function HeaderSettings() {
 }
 
 function readAccent(value: string | null): Accent {
-  return accentOptions.some((option) => option.value === value) ? (value as Accent) : "green";
+  return value === "custom" || accentOptions.some((option) => option.value === value) ? (value as Accent) : "green";
+}
+
+function readColor(value: string | null) {
+  return value && /^#[0-9a-f]{6}$/i.test(value) ? value : "#5d7461";
 }
 
 function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
 }
 
-function applyAccent(accent: Accent) {
+function applyAccent(accent: Accent, customColor: string) {
   document.documentElement.dataset.accent = accent;
+  if (accent === "custom") {
+    document.documentElement.style.setProperty("--color-moss", hexToRgb(customColor));
+  } else {
+    document.documentElement.style.removeProperty("--color-moss");
+  }
+}
+
+function applyBackground(background: string) {
+  document.documentElement.style.setProperty("--background-image", `url("${background}") center / cover fixed`);
+}
+
+function hexToRgb(hex: string) {
+  const value = hex.replace("#", "");
+  return `${parseInt(value.slice(0, 2), 16)} ${parseInt(value.slice(2, 4), 16)} ${parseInt(value.slice(4, 6), 16)}`;
 }
