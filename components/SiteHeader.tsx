@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { HeaderNav } from "@/components/HeaderNav";
-import { HeaderUser } from "@/components/HeaderUser";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { HeaderSettings } from "@/components/HeaderSettings";
 
 export function SiteHeader() {
   return (
@@ -14,8 +13,7 @@ export function SiteHeader() {
             树洞
           </Link>
           <div className="flex min-w-0 flex-1 flex-nowrap items-center justify-end gap-2">
-            <HeaderUser />
-            <ThemeToggle />
+            <HeaderSettings />
           </div>
         </div>
       </header>

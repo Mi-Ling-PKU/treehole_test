@@ -29,6 +29,38 @@
   --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.26);
 }
 
+:root[data-accent="blue"] {
+  --color-moss: 79 111 145;
+}
+
+:root[data-accent="amber"] {
+  --color-moss: 167 111 43;
+}
+
+:root[data-accent="rose"] {
+  --color-moss: 169 86 112;
+}
+
+:root[data-accent="slate"] {
+  --color-moss: 100 112 125;
+}
+
+.dark[data-accent="blue"] {
+  --color-moss: 125 165 211;
+}
+
+.dark[data-accent="amber"] {
+  --color-moss: 219 156 74;
+}
+
+.dark[data-accent="rose"] {
+  --color-moss: 219 126 154;
+}
+
+.dark[data-accent="slate"] {
+  --color-moss: 157 169 181;
+}
+
 * {
   box-sizing: border-box;
 }

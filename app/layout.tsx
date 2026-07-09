@@ -14,7 +14,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var t=localStorage.getItem('theme');document.documentElement.classList.toggle('dark',t!=='light')}catch(e){}"
+              "try{var t=localStorage.getItem('theme');var a=localStorage.getItem('accent')||'green';document.documentElement.classList.toggle('dark',t!=='light');document.documentElement.dataset.accent=a}catch(e){}"
           }}
         />
         <div className="min-h-screen">

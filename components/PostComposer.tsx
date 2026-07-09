@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Send } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Send, Tag } from "lucide-react";
 import { createPost } from "@/lib/data";
+
+const postTags = ["课程", "科研", "就业", "二手市场", "失物招领"];
 
 export function PostComposer({
   onCreated,
@@ -17,6 +19,7 @@ export function PostComposer({
   const [loadedDraftKey, setLoadedDraftKey] = useState<string | null>(draftKey ?? null);
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     if (!draftKey) {
@@ -66,16 +69,66 @@ export function PostComposer({
     }
   }
 
+  function insertTag(tag: string) {
+    const textarea = textareaRef.current;
+    const tagText = `#${tag}`;
+
+    if (!textarea) {
+      setContent((value) => appendTag(value, tagText));
+      return;
+    }
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const before = content.slice(0, start);
+    const after = content.slice(end);
+    const prefix = before && !/\s$/.test(before) ? " " : "";
+    const suffix = after && !/^\s/.test(after) ? " " : "";
+    const nextContent = `${before}${prefix}${tagText} ${suffix}${after}`;
+    const nextCursor = before.length + prefix.length + tagText.length + 1;
+
+    setContent(nextContent);
+    window.requestAnimationFrame(() => {
+      textarea.focus();
+      textarea.setSelectionRange(nextCursor, nextCursor);
+    });
+  }
+
   return (
     <form
       onSubmit={submitPost}
       className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/90 p-4 shadow-soft" : "space-y-3"}
     >
-      <label htmlFor="post-content" className="text-sm font-semibold text-ink">
-        写进树洞
-      </label>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <label htmlFor="post-tag" className="inline-flex items-center gap-1 text-sm font-semibold text-ink">
+          <Tag size={15} aria-hidden="true" />
+          标签
+        </label>
+        <select
+          id="post-tag"
+          defaultValue=""
+          onChange={(event) => {
+            if (event.target.value) {
+              insertTag(event.target.value);
+              event.target.value = "";
+            }
+          }}
+          className="focus-ring rounded-md border border-ink/15 bg-paper px-3 py-2 text-sm"
+        >
+          <option value="" disabled>
+            添加标签
+          </option>
+          {postTags.map((tag) => (
+            <option key={tag} value={tag}>
+              {tag}
+            </option>
+          ))}
+        </select>
+      </div>
       <textarea
+        ref={textareaRef}
         id="post-content"
+        aria-label="树洞内容"
         value={content}
         onChange={(event) => setContent(event.target.value)}
         rows={10}
@@ -95,4 +148,12 @@ export function PostComposer({
       {status ? <p className="mt-3 text-sm text-ink/60">{status}</p> : null}
     </form>
   );
+}
+
+function appendTag(content: string, tagText: string) {
+  if (!content) {
+    return `${tagText} `;
+  }
+
+  return `${content}${/\s$/.test(content) ? "" : " "}${tagText} `;
 }
