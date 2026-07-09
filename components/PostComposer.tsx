@@ -99,10 +99,9 @@ export function PostComposer({
       onSubmit={submitPost}
       className={surface === "card" ? "rounded-md border border-ink/10 bg-panel/90 p-4 shadow-soft" : "space-y-3"}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <label htmlFor="post-tag" className="inline-flex items-center gap-1 text-sm font-semibold text-ink">
+      <div className="flex flex-wrap items-center justify-start gap-2">
+        <label htmlFor="post-tag" className="inline-flex h-10 w-10 items-center justify-center rounded-md text-ink/65" title="标签">
           <Tag size={15} aria-hidden="true" />
-          标签
         </label>
         <select
           id="post-tag"
